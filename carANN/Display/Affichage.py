@@ -135,7 +135,7 @@ class Affichage(object):
         intersection = [self.positionVoiture.center] * 5 #pour faire un lancer de rayon
         
         for capteur in range (5):
-            angleCapteur = -90 + capteur*45
+            angleCapteur = 90 - capteur*45
             
             i=0
             while ((int(intersection[capteur][0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(intersection[capteur][1]+i*-math.sin(math.radians(self.angle + angleCapteur)))) not in self.circuit) and (i <= 100) :
@@ -186,9 +186,12 @@ class Affichage(object):
             else:
                 self.window.set_at(capteur, pygame.Color("green"))
                 
+        valeurCapteur = [0]*5
         for capteur in range(5):
             pygame.draw.line(self.window, pygame.Color("blue"), self.positionVoiture.center, intersection[capteur], 1)
+            valeurCapteur[capteur] = math.sqrt((intersection[capteur][0] - self.positionVoiture.center[0])**2+(intersection[capteur][1]-self.positionVoiture.center[1])**2)
         
+        print(valeurCapteur)
     #fonction permettant de faire tourner la voiture
     def rotation(self, angle):
         self.voiture = pygame.transform.rotate(self.orig_voiture, angle)
