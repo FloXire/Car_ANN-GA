@@ -80,7 +80,7 @@ class Affichage(object):
             self.afficherCircuit()
             self.window.blit(self.voiture, self.positionVoiture)
             self.getValeursCapteurs()
-            pygame.display.flip() #On affiche tous les elements a l ecran
+            pygame.display.flip() #On affiche tous les elements a l ecran 
     
         
     def initCircuit(self):
@@ -132,7 +132,7 @@ class Affichage(object):
         
         
         #Solution qui fonctionne mais avec des problemes d optimisation
-        intersection = [self.positionVoiture.center] * 5
+        intersection = [self.positionVoiture.center] * 5 #pour faire un lancer de rayon
         
         for capteur in range (5):
             angleCapteur = -90 + capteur*45
