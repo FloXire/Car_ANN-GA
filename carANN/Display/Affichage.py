@@ -15,8 +15,10 @@ from pygame.locals import *
 
 import math
 import numpy as np
+import theano
+import lasagne
 
-class Affichage(object):
+class Affichage():
     
     def __init__(self):
         
@@ -138,7 +140,7 @@ class Affichage(object):
             angleCapteur = -90 + capteur*45
             
             i=0
-            while ((int(intersection[capteur][0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(intersection[capteur][1]+i*-math.sin(math.radians(self.angle + angleCapteur)))) not in self.circuit) and (i <= 100) :
+            while ((int(intersection[capteur][0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(intersection[capteur][1]+i*-math.sin(math.radians(self.angle + angleCapteur)))) in self.circuit) and (i <= 100) :
                 i+=1
                 
             intersection[capteur] = (int(intersection[capteur][0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(intersection[capteur][1]+i*-math.sin(math.radians(self.angle + angleCapteur))))
