@@ -139,11 +139,10 @@ class Affichage():
         distanceCapteur = [0]*5 #renvoie la distance entre le centre de la voiture et le circuit pour chaque capteur
 
         for capteur in range (5): #capteur 0 a gauche, capteur 2 en face et capteur 3 a droite de la voiture
+
             angleCapteur = 90 - capteur*45 
-            
             debutRayon = translationCentre(self.positionVoiture.center, self.angle, angleCapteur, capteur) #pour faire un lancer de rayon, on initialise tous les rayons au centre de la voiture
 
-                        
             i=0
             
             #self.window.get_at(self.positionVoiture.center)
@@ -154,13 +153,6 @@ class Affichage():
             #on multiplie par -sin car l'axe des ordonnees est oriente vers le bas
             
             #try:
-            
-            print(capteur)
-            
-            if capteur == 1:
-                print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-                print(self.window.get_at((int(debutRayon[0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(debutRayon[1]+i*-math.sin(math.radians(self.angle + angleCapteur))))))
-                print(sommeRGB(self.window.get_at((int(debutRayon[0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(debutRayon[1]+i*-math.sin(math.radians(self.angle + angleCapteur)))))))
             
             while ((sommeRGB(self.window.get_at((int(debutRayon[0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(debutRayon[1]+i*-math.sin(math.radians(self.angle + angleCapteur)))))) < 715) and (i <= 60)) :
                 
@@ -178,7 +170,7 @@ class Affichage():
             else:
                 pygame.draw.line(self.window, pygame.Color("white"), debutRayon, intersection, 1)
                             
-            #distanceCapteur[capteur] = math.sqrt((intersection[capteur][0] - self.positionVoiture.center[0])**2+(intersection[capteur][1]-self.positionVoiture.center[1])**2)
+            distanceCapteur[capteur] = math.sqrt((intersection[0] - debutRayon[0])**2+(intersection[1] - debutRayon[1])**2)
 
             #except IndexError:
             #    pass
@@ -225,6 +217,8 @@ class Affichage():
             else:
                 self.window.set_at(capteur, pygame.Color("green"))
            """          
+        for capteur in distanceCapteur:
+            print(capteur)
         
     #fonction permettant de faire tourner la voiture
     def rotation(self, angle):
