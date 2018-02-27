@@ -78,13 +78,14 @@ class Affichage():
             
             self.move()
                         
-            self.window.fill(pygame.Color("white")) #remet tout en blanc
+            self.window.fill(pygame.Color("black")) #remet tout en noir
             self.afficherCircuit()
             self.window.blit(self.voiture, self.positionVoiture)
             self.getValeursCapteurs()
+            
             pygame.display.flip() #On affiche tous les elements a l ecran 
-    
-        
+            
+            
     def initCircuit(self):
         
         #on remplit la liste circuit avec tous les points composant le circuit
@@ -121,7 +122,7 @@ class Affichage():
     def afficherCircuit(self):
         for i in range(self.windowSize[0]):
             for y in [199,200,201,399,400,401]:
-                self.window.set_at((i,(int(100*math.sin(i*0.01))+y)), pygame.Color("black"))
+                self.window.set_at((i,(int(100*math.sin(i*0.01))+y)), pygame.Color("white"))
 
             
     def getValeursCapteurs(self):
@@ -134,18 +135,38 @@ class Affichage():
         
         
         #Solution qui fonctionne mais avec des problemes d optimisation
-        intersection = [self.positionVoiture.center] * 5 #pour faire un lancer de rayon
-        
-        for capteur in range (5):
-            angleCapteur = 90 - capteur*45
+        intersection = [self.positionVoiture.center] * 5 #pour faire un lancer de rayon, on initialise tous les rayons au centre de la voiture
+        distanceCapteur = [0]*5 #renvoie la distance entre le centre de la voiture et le circuit pour chaque capteur
+
+        for capteur in range (5): #capteur 0 a gauche, capteur 2 en face et capteur 3 a droite de la voiture
+            angleCapteur = 90 - capteur*45 
             
             i=0
-            while ((int(intersection[capteur][0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(intersection[capteur][1]+i*-math.sin(math.radians(self.angle + angleCapteur)))) in self.circuit) and (i <= 100) :
-                i+=1
+            
+            #self.window.get_at(self.positionVoiture.center)
+            #self.window.set_at(self.positionVoiture.center, (0,0,0))
+            
+            #on part du centre pour chaque rayon et on ajoute respectivement aux coordonnees x et y des fonction de cos et de sin a chaque iteration
+            #self.angle est l'angle du vehicule (- vers la droite, + vers la gauche, cad sens trigo), on lui ajoute l'angle du capteur (= a 0 pour le capteur du milieu car capteur = 2)
+            #on multiplie par -sin car l'axe des ordonnees est oriente vers le bas
+            while ((sommeRGB(self.window.get_at((int(intersection[capteur][0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(intersection[capteur][1]+i*-math.sin(math.radians(self.angle + angleCapteur)))))) < 715) and (i <= 100)) :
                 
+                i+=1                
+                
+                """if capteur == 1:
+                    print(i)
+                    print(self.window.get_at((int(intersection[capteur][0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(intersection[capteur][1]+i*-math.sin(math.radians(self.angle + angleCapteur))))))
+                    #print(sommeRGB(self.window.get_at((int(intersection[capteur][0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(intersection[capteur][1]+i*-math.sin(math.radians(self.angle + angleCapteur)))))))
+                """
             intersection[capteur] = (int(intersection[capteur][0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(intersection[capteur][1]+i*-math.sin(math.radians(self.angle + angleCapteur))))
         
-        
+            if i<=100:
+                pygame.draw.line(self.window, pygame.Color("red"), self.positionVoiture.center, intersection[capteur], 1)
+            else:
+                pygame.draw.line(self.window, pygame.Color("white"), self.positionVoiture.center, intersection[capteur], 1)
+
+            distanceCapteur[capteur] = math.sqrt((intersection[capteur][0] - self.positionVoiture.center[0])**2+(intersection[capteur][1]-self.positionVoiture.center[1])**2)
+
         #solution qui ne fonctionne pas trop mais est fluide
         """
         angle = math.radians(self.angle)
@@ -181,25 +202,22 @@ class Affichage():
                     break
         """
         
-        for capteur in [RAVD, RAVG, RARD, RARG]:
+        """for capteur in [RAVD, RAVG, RARD, RARG]:
             if capteur in self.circuit:
                 print("sortie de piste")
                 self.window.set_at(capteur, pygame.Color("red"))
             else:
                 self.window.set_at(capteur, pygame.Color("green"))
-                
-        valeurCapteur = [0]*5
-        for capteur in range(5):
-            pygame.draw.line(self.window, pygame.Color("blue"), self.positionVoiture.center, intersection[capteur], 1)
-            valeurCapteur[capteur] = math.sqrt((intersection[capteur][0] - self.positionVoiture.center[0])**2+(intersection[capteur][1]-self.positionVoiture.center[1])**2)
+           """          
         
-        print(valeurCapteur)
     #fonction permettant de faire tourner la voiture
     def rotation(self, angle):
         self.voiture = pygame.transform.rotate(self.orig_voiture, angle)
         self.positionVoiture = self.voiture.get_rect(center = self.positionVoiture.center)
         self.angle = angle
-        
+    
+def sommeRGB(tab):
+        return (tab[0]+tab[1]+tab[2])    
 
 Affichage()
         
