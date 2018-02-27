@@ -135,12 +135,15 @@ class Affichage():
         
         
         #Solution qui fonctionne mais avec des problemes d optimisation
-        intersection = [self.positionVoiture.center] * 5 #pour faire un lancer de rayon, on initialise tous les rayons au centre de la voiture
+        intersection = [self.positionVoiture.center]*5
         distanceCapteur = [0]*5 #renvoie la distance entre le centre de la voiture et le circuit pour chaque capteur
 
         for capteur in range (5): #capteur 0 a gauche, capteur 2 en face et capteur 3 a droite de la voiture
             angleCapteur = 90 - capteur*45 
             
+            debutRayon = translationCentre(self.positionVoiture.center, self.angle, angleCapteur, capteur) #pour faire un lancer de rayon, on initialise tous les rayons au centre de la voiture
+
+                        
             i=0
             
             #self.window.get_at(self.positionVoiture.center)
@@ -149,23 +152,36 @@ class Affichage():
             #on part du centre pour chaque rayon et on ajoute respectivement aux coordonnees x et y des fonction de cos et de sin a chaque iteration
             #self.angle est l'angle du vehicule (- vers la droite, + vers la gauche, cad sens trigo), on lui ajoute l'angle du capteur (= a 0 pour le capteur du milieu car capteur = 2)
             #on multiplie par -sin car l'axe des ordonnees est oriente vers le bas
-            while ((sommeRGB(self.window.get_at((int(intersection[capteur][0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(intersection[capteur][1]+i*-math.sin(math.radians(self.angle + angleCapteur)))))) < 715) and (i <= 100)) :
+            
+            #try:
+            
+            print(capteur)
+            
+            if capteur == 1:
+                print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+                print(self.window.get_at((int(debutRayon[0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(debutRayon[1]+i*-math.sin(math.radians(self.angle + angleCapteur))))))
+                print(sommeRGB(self.window.get_at((int(debutRayon[0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(debutRayon[1]+i*-math.sin(math.radians(self.angle + angleCapteur)))))))
+            
+            while ((sommeRGB(self.window.get_at((int(debutRayon[0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(debutRayon[1]+i*-math.sin(math.radians(self.angle + angleCapteur)))))) < 715) and (i <= 60)) :
                 
                 i+=1                
-                
+                                
                 """if capteur == 1:
                     print(i)
-                    print(self.window.get_at((int(intersection[capteur][0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(intersection[capteur][1]+i*-math.sin(math.radians(self.angle + angleCapteur))))))
-                    #print(sommeRGB(self.window.get_at((int(intersection[capteur][0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(intersection[capteur][1]+i*-math.sin(math.radians(self.angle + angleCapteur)))))))
+                    print(self.window.get_at((int(debutRayon[0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(debutRayon[1]+i*-math.sin(math.radians(self.angle + angleCapteur))))))
+                    print(sommeRGB(self.window.get_at((int(debutRayon[0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(debutRayon[1]+i*-math.sin(math.radians(self.angle + angleCapteur)))))))
                 """
-            intersection[capteur] = (int(intersection[capteur][0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(intersection[capteur][1]+i*-math.sin(math.radians(self.angle + angleCapteur))))
+            intersection = (int(debutRayon[0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(debutRayon[1]+i*-math.sin(math.radians(self.angle + angleCapteur))))
         
-            if i<=100:
-                pygame.draw.line(self.window, pygame.Color("red"), self.positionVoiture.center, intersection[capteur], 1)
+            if i<=60:
+                pygame.draw.line(self.window, pygame.Color("red"), debutRayon, intersection, 1)
             else:
-                pygame.draw.line(self.window, pygame.Color("white"), self.positionVoiture.center, intersection[capteur], 1)
+                pygame.draw.line(self.window, pygame.Color("white"), debutRayon, intersection, 1)
+                            
+            #distanceCapteur[capteur] = math.sqrt((intersection[capteur][0] - self.positionVoiture.center[0])**2+(intersection[capteur][1]-self.positionVoiture.center[1])**2)
 
-            distanceCapteur[capteur] = math.sqrt((intersection[capteur][0] - self.positionVoiture.center[0])**2+(intersection[capteur][1]-self.positionVoiture.center[1])**2)
+            #except IndexError:
+            #    pass
 
         #solution qui ne fonctionne pas trop mais est fluide
         """
@@ -215,6 +231,17 @@ class Affichage():
         self.voiture = pygame.transform.rotate(self.orig_voiture, angle)
         self.positionVoiture = self.voiture.get_rect(center = self.positionVoiture.center)
         self.angle = angle
+    
+def translationCentre(posCentre, angleVoiture, angleCapteur, capteur):
+    
+    if (capteur == 0 or capteur == 4):
+        newPos = (posCentre[0]+31*math.cos(math.radians(angleVoiture + angleCapteur)), posCentre[1]-31*math.sin(math.radians(angleVoiture + angleCapteur)))
+    elif (capteur == 1 or capteur == 3):
+        newPos = (posCentre[0]+44*math.cos(math.radians(angleVoiture + angleCapteur)), posCentre[1]-44*math.sin(math.radians(angleVoiture + angleCapteur)))
+    else:
+        newPos = (posCentre[0]+74*math.cos(math.radians(angleVoiture + angleCapteur)), posCentre[1]-74*math.sin(math.radians(angleVoiture + angleCapteur)))
+   
+    return newPos
     
 def sommeRGB(tab):
         return (tab[0]+tab[1]+tab[2])    
