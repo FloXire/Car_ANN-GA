@@ -78,13 +78,17 @@ class Affichage():
                 
             if pygame.key.get_pressed()[K_LEFT]:
                 self.rotation(self.angle+1)
-            
+
             self.move()
+
+            
                         
             self.window.fill(pygame.Color("black")) #remet tout en noir
             self.afficherCircuit()
             self.window.blit(self.voiture, self.positionVoiture)
+            
             self.getValeursCapteurs()
+            self.rotation(self.angle + retourReseau(self.distances)[0][0])
             
             pygame.display.flip() #On affiche tous les elements a l ecran 
             
@@ -177,41 +181,6 @@ class Affichage():
 
             #except IndexError:
             #    pass
-
-        #solution qui ne fonctionne pas trop mais est fluide
-        """
-        angle = math.radians(self.angle)
-        intersection = self.positionVoiture.center
-        for i in range(1280):
-            if (int(intersection[0]+i*math.cos(angle)), int(intersection[1]+i*-math.sin(angle))) in self.circuit:
-                intersection = (int(intersection[0]+i*math.cos(angle)), int(intersection[1]+i*-math.sin(angle)))
-                break
-            """
-    
-        """
-        intersection = self.positionVoiture.center
-    
-        #Si l angle n est pas egal a +90 ou - 90 degres
-        if -math.sin(math.radians(self.angle)) != 0:
-                a = -math.sin(math.radians(self.angle))/math.cos(math.radians(self.angle)) # calcul pour le coefficient directeur
-        else:
-            a = 0
-        b = self.positionVoiture.center[1] - a*self.positionVoiture.center[0] #calcul pour l ordonnee a l origine
-        
-        
-        #on parcourt la fenetre et si l equation est validee, alors intersection prend la position
-        for x in range(self.windowSize[0]):
-                if int(a*x - 100*math.sin(x*0.01)) == int(200-b):
-                    intersection = (x, int(a*x+b))
-                    break
-                if int(a*x - 100*math.sin(x*0.01)) == int(200-b):
-                    intersection = (x, int(a*x+b))
-                    print("BIen joue")
-                    break
-                elif int(a*x - 100*math.sin(x*0.01)) == int(400-b):
-                    intersection = (x, int(a*x+b))
-                    break
-        """
         
         for capteur in [RAVD, RAVG, RARD, RARG]:
             if capteur in self.circuit:
@@ -219,8 +188,8 @@ class Affichage():
                 self.window.set_at(capteur, pygame.Color("red"))
             else:
                 self.window.set_at(capteur, pygame.Color("green"))
-     
-        print(distanceCapteur)
+        
+        self.distances = distanceCapteur
         
     #fonction permettant de faire tourner la voiture
     def rotation(self, angle):
@@ -240,7 +209,41 @@ def translationCentre(posCentre, angleVoiture, angleCapteur, capteur):
     return newPos
     
 def sommeRGB(tab):
-        return (tab[0]+tab[1]+tab[2])    
+        return (tab[0]+tab[1]+tab[2])
+    
+
+def BuildNeuronalNetwork():
+
+    W_init = np.random.normal(0, 0.1, (5, 10))
+    b_init = np.random.normal(0, 0.1, (10,))
+    
+    print(W_init)
+    print(b_init)
+    
+    W_output = np.random.normal(0, 0.1, (10, 1))
+    b_output = np.random.normal(0, 0.1, (1,))
+    
+    x = T.matrix('x')
+    
+    l_in = lasagne.layers.InputLayer(((1,5)), name="input_layer", input_var=x)
+    l_hidden = lasagne.layers.DenseLayer(l_in, 10, name="hidden_layer", W=W_init, b=b_init)
+    l_out = lasagne.layers.DenseLayer(l_hidden, 1, name="output_layer", W=W_output, b=b_output)
+    y = lasagne.layers.get_output(l_out)
+    
+    f = theano.function([x], y)
+    
+    return f
+
+f = BuildNeuronalNetwork()
+
+def retourReseau(distances):
+    
+    inputNet = np.array([distances])
+    print(f(inputNet))
+    return f(inputNet)
+
+
+    
 
 
 Affichage()
