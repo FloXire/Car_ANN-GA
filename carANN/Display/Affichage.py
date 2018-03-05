@@ -168,7 +168,7 @@ class Affichage():
             if i<=60:
                 pygame.draw.line(self.window, pygame.Color("red"), debutRayon, intersection, 1)
             else:
-                pygame.draw.line(self.window, pygame.Color("white"), debutRayon, intersection, 1)
+                pygame.draw.line(self.window, pygame.Color("green"), debutRayon, intersection, 1)
                             
             distanceCapteur[capteur] = math.sqrt((intersection[0] - debutRayon[0])**2+(intersection[1] - debutRayon[1])**2)
 
