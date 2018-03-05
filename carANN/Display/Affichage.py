@@ -14,8 +14,11 @@ import pygame
 from pygame.locals import *
 
 import math
+
 import numpy as np
 import theano
+import theano.tensor as T
+
 import lasagne
 
 class Affichage():
@@ -210,15 +213,14 @@ class Affichage():
                     break
         """
         
-        """for capteur in [RAVD, RAVG, RARD, RARG]:
+        for capteur in [RAVD, RAVG, RARD, RARG]:
             if capteur in self.circuit:
                 print("sortie de piste")
                 self.window.set_at(capteur, pygame.Color("red"))
             else:
                 self.window.set_at(capteur, pygame.Color("green"))
-           """          
-        for capteur in distanceCapteur:
-            print(capteur)
+     
+        print(distanceCapteur)
         
     #fonction permettant de faire tourner la voiture
     def rotation(self, angle):
@@ -239,6 +241,7 @@ def translationCentre(posCentre, angleVoiture, angleCapteur, capteur):
     
 def sommeRGB(tab):
         return (tab[0]+tab[1]+tab[2])    
+
 
 Affichage()
         
