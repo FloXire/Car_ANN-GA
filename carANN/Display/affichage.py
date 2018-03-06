@@ -14,9 +14,14 @@ import pygame
 from pygame.locals import *
 
 import math
+
 import numpy as np
 import theano
+import theano.tensor as T
+
 import lasagne
+
+tabScores = []
 
 class Affichage():
     
@@ -27,8 +32,9 @@ class Affichage():
         
         self.windowSize = (1280,720)
         self.name = "TIPE"
-        self.icon = pygame.image.load("car.png")
-        self.voiture = pygame.image.load("car.png")
+        self.imgVoiture = "car.png"
+        self.icon = pygame.image.load(self.imgVoiture)
+        self.voiture = pygame.image.load(self.imgVoiture)
         self.orig_voiture = self.voiture
         
         self.window = pygame.display.set_mode(self.windowSize)
@@ -55,10 +61,17 @@ class Affichage():
         
         self.angle = 0
         
+        self.tabRetourReseau = []
+        self.score = 0
+        
+        self.f = self.BuildNeuralNetwork()
+        
         self.run = True
         self.update()
         
-    def update(self):        
+        
+    def update(self):
+                        
         while self.run:
                 
             for event in pygame.event.get():
@@ -77,13 +90,30 @@ class Affichage():
                 self.rotation(self.angle+1)
             
             self.move()
+
+            
                         
             self.window.fill(pygame.Color("black")) #remet tout en noir
             self.afficherCircuit()
             self.window.blit(self.voiture, self.positionVoiture)
+            
             self.getValeursCapteurs()
+        
+            """self.tabRetourReseau.append(retourReseau(self.distances)[0][0])
+            print(sum(self.tabRetourReseau)/float(len(self.tabRetourReseau)))"""
+            
+            
+            self.rotation(self.angle + self.retourReseau(self.distances)[0][0])
+            
+            #print(self.score)
             
             pygame.display.flip() #On affiche tous les elements a l ecran 
+            
+            
+        if not(self.run):
+            tabScores.append(self.score)
+            print(tabScores)
+            Affichage()
             
             
     def initCircuit(self):
@@ -141,7 +171,7 @@ class Affichage():
         for capteur in range (5): #capteur 0 a gauche, capteur 2 en face et capteur 3 a droite de la voiture
 
             angleCapteur = 90 - capteur*45 
-            debutRayon = translationCentre(self.positionVoiture.center, self.angle, angleCapteur, capteur) #pour faire un lancer de rayon, on initialise tous les rayons au centre de la voiture
+            debutRayon = self.translationCentre(self.positionVoiture.center, self.angle, angleCapteur, capteur) #pour faire un lancer de rayon, on initialise tous les rayons au centre de la voiture
 
             i=0
             
@@ -152,73 +182,50 @@ class Affichage():
             #self.angle est l'angle du vehicule (- vers la droite, + vers la gauche, cad sens trigo), on lui ajoute l'angle du capteur (= a 0 pour le capteur du milieu car capteur = 2)
             #on multiplie par -sin car l'axe des ordonnees est oriente vers le bas
             
-            #try:
+            try:
             
-            while ((sommeRGB(self.window.get_at((int(debutRayon[0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(debutRayon[1]+i*-math.sin(math.radians(self.angle + angleCapteur)))))) < 715) and (i <= 60)) :
-                
-                i+=1                
+                #on lance un rayon jusqu'a ce qu'il rencontre le circuit ou qu'il soit superieur a une certaine valeur
+                while ((self.sommeRGB(self.window.get_at((int(debutRayon[0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(debutRayon[1]+i*-math.sin(math.radians(self.angle + angleCapteur)))))) < 715) and (i <= 60)) :
+                    
+                    i+=1                
+                                    
+                    """if capteur == 1:
+                        print(i)
+                        print(self.window.get_at((int(debutRayon[0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(debutRayon[1]+i*-math.sin(math.radians(self.angle + angleCapteur))))))
+                        print(sommeRGB(self.window.get_at((int(debutRayon[0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(debutRayon[1]+i*-math.sin(math.radians(self.angle + angleCapteur)))))))
+                    """
+                intersection = (int(debutRayon[0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(debutRayon[1]+i*-math.sin(math.radians(self.angle + angleCapteur))))
+            
+                if i<=60:
+                    pygame.draw.line(self.window, pygame.Color("red"), debutRayon, intersection, 1)
+                else:
+                    pygame.draw.line(self.window, pygame.Color("green"), debutRayon, intersection, 1)
                                 
-                """if capteur == 1:
-                    print(i)
-                    print(self.window.get_at((int(debutRayon[0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(debutRayon[1]+i*-math.sin(math.radians(self.angle + angleCapteur))))))
-                    print(sommeRGB(self.window.get_at((int(debutRayon[0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(debutRayon[1]+i*-math.sin(math.radians(self.angle + angleCapteur)))))))
-                """
-            intersection = (int(debutRayon[0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(debutRayon[1]+i*-math.sin(math.radians(self.angle + angleCapteur))))
-        
-            if i<=60:
-                pygame.draw.line(self.window, pygame.Color("red"), debutRayon, intersection, 1)
-            else:
-                pygame.draw.line(self.window, pygame.Color("green"), debutRayon, intersection, 1)
-                            
-            distanceCapteur[capteur] = math.sqrt((intersection[0] - debutRayon[0])**2+(intersection[1] - debutRayon[1])**2)
-
-            #except IndexError:
-            #    pass
-
-        #solution qui ne fonctionne pas trop mais est fluide
-        """
-        angle = math.radians(self.angle)
-        intersection = self.positionVoiture.center
-        for i in range(1280):
-            if (int(intersection[0]+i*math.cos(angle)), int(intersection[1]+i*-math.sin(angle))) in self.circuit:
-                intersection = (int(intersection[0]+i*math.cos(angle)), int(intersection[1]+i*-math.sin(angle)))
-                break
-            """
+                distanceCapteur[capteur] = math.sqrt((intersection[0] - debutRayon[0])**2+(intersection[1] - debutRayon[1])**2)
     
-        """
-        intersection = self.positionVoiture.center
     
-        #Si l angle n est pas egal a +90 ou - 90 degres
-        if -math.sin(math.radians(self.angle)) != 0:
-                a = -math.sin(math.radians(self.angle))/math.cos(math.radians(self.angle)) # calcul pour le coefficient directeur
-        else:
-            a = 0
-        b = self.positionVoiture.center[1] - a*self.positionVoiture.center[0] #calcul pour l ordonnee a l origine
+                """for capteur in [RAVD, RAVG, RARD, RARG]:
+                    if capteur in self.circuit:
+                        #print("sortie de piste")
+                        self.window.set_at(capteur, pygame.Color("red"))
+                    else:
+                        self.window.set_at(capteur, pygame.Color("green"))"""
+                
+                self.distances = distanceCapteur #tableau 1*5 
+                
+                self.scoreTmp = self.positionVoiture.center[0]
+                
+                if self.scoreTmp > self.score:
+                    self.score = self.scoreTmp
+                    
+            except IndexError:
+                self.run = False
         
-        
-        #on parcourt la fenetre et si l equation est validee, alors intersection prend la position
-        for x in range(self.windowSize[0]):
-                if int(a*x - 100*math.sin(x*0.01)) == int(200-b):
-                    intersection = (x, int(a*x+b))
-                    break
-                if int(a*x - 100*math.sin(x*0.01)) == int(200-b):
-                    intersection = (x, int(a*x+b))
-                    print("BIen joue")
-                    break
-                elif int(a*x - 100*math.sin(x*0.01)) == int(400-b):
-                    intersection = (x, int(a*x+b))
-                    break
-        """
-        
-        """for capteur in [RAVD, RAVG, RARD, RARG]:
-            if capteur in self.circuit:
-                print("sortie de piste")
-                self.window.set_at(capteur, pygame.Color("red"))
-            else:
-                self.window.set_at(capteur, pygame.Color("green"))
-           """          
-        for capteur in distanceCapteur:
-            print(capteur)
+        for distance in self.distances:
+            if distance <= 2:
+                self.run = False
+                #return self.score
+            
         
     #fonction permettant de faire tourner la voiture
     def rotation(self, angle):
@@ -226,19 +233,57 @@ class Affichage():
         self.positionVoiture = self.voiture.get_rect(center = self.positionVoiture.center)
         self.angle = angle
     
-def translationCentre(posCentre, angleVoiture, angleCapteur, capteur):
     
-    if (capteur == 0 or capteur == 4):
-        newPos = (posCentre[0]+31*math.cos(math.radians(angleVoiture + angleCapteur)), posCentre[1]-31*math.sin(math.radians(angleVoiture + angleCapteur)))
-    elif (capteur == 1 or capteur == 3):
-        newPos = (posCentre[0]+44*math.cos(math.radians(angleVoiture + angleCapteur)), posCentre[1]-44*math.sin(math.radians(angleVoiture + angleCapteur)))
-    else:
-        newPos = (posCentre[0]+74*math.cos(math.radians(angleVoiture + angleCapteur)), posCentre[1]-74*math.sin(math.radians(angleVoiture + angleCapteur)))
-   
-    return newPos
-    
-def sommeRGB(tab):
-        return (tab[0]+tab[1]+tab[2])    
-
-Affichage()
+    def translationCentre(self, posCentre, angleVoiture, angleCapteur, capteur):
         
+        if (capteur == 0 or capteur == 4):
+            newPos = (posCentre[0]+31*math.cos(math.radians(angleVoiture + angleCapteur)), posCentre[1]-31*math.sin(math.radians(angleVoiture + angleCapteur)))
+        elif (capteur == 1 or capteur == 3):
+            newPos = (posCentre[0]+44*math.cos(math.radians(angleVoiture + angleCapteur)), posCentre[1]-44*math.sin(math.radians(angleVoiture + angleCapteur)))
+        else:
+            newPos = (posCentre[0]+74*math.cos(math.radians(angleVoiture + angleCapteur)), posCentre[1]-74*math.sin(math.radians(angleVoiture + angleCapteur)))
+       
+        return newPos
+    
+        
+    def sommeRGB(self, tab):
+            return (tab[0]+tab[1]+tab[2])
+    
+    
+    def BuildNeuralNetwork(self):
+    
+        W_init = np.random.normal(0, 0.1, (5, 10))
+        #b_init = np.random.normal(0, 0.1, (10,))
+        
+        #print(W_init)
+        #print(b_init)
+        
+        W_output = np.random.normal(0, 0.1, (10, 1))
+        #b_output = np.random.normal(0, 0.1, (1,))
+        
+        x = T.matrix('x')
+        
+        l_in = lasagne.layers.InputLayer((1,5), name="input_layer", nonlinearity=lasagne.nonlinearities.ScaledTanh(scale_in = math.pi, scale_out = math.pi), input_var=x)
+        l_hidden = lasagne.layers.DenseLayer(l_in, 10, name="hidden_layer", nonlinearity=lasagne.nonlinearities.ScaledTanh(scale_in = math.pi, scale_out = math.pi), W=W_init)
+        l_out = lasagne.layers.DenseLayer(l_hidden, 1, name="output_layer", nonlinearity=lasagne.nonlinearities.ScaledTanh(scale_in = math.pi, scale_out = math.pi), W=W_output)
+        y = lasagne.layers.get_output(l_out)
+        
+        f = theano.function([x], y)
+        
+        paramsReseau = lasagne.layers.get_all_param_values(l_out)
+        
+        #print(paramsReseau)
+        
+        return f
+    
+    
+    def retourReseau(self, distances):
+        inputNet = np.array([distances])
+        #print(f(inputNet))
+        return self.f(inputNet)
+    
+    
+    def algoGen(self):
+        pass
+
+Affichage()        
