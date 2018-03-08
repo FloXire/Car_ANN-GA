@@ -6,8 +6,6 @@ Created on 6 mars 2018
 
 from Display.affichage import Affichage
 
-#def launchRandomANN():
-
 def launchRandomANN():
     Affichage()
 

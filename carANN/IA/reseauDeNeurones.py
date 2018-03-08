@@ -3,11 +3,15 @@ import theano
 import theano.tensor as T
 import lasagne
 import math
+from Commun.constantes import Constante
 
 inputNet = np.array([[-60,-60,-60,-60,-60]])
 
 #print(inputNet.shape)
 
+for i in range(100):
+    print(np.random.randint(Constante.NOMBRE_INDIVIDUS_CROISEMENT))
+    
 def aNN():
 
     W_init = np.random.uniform(-0.1, 0.1, (5, 10))

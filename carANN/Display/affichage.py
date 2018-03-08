@@ -3,6 +3,7 @@ Created on 23 fevr. 2018
 
 @author: flo-1
 '''
+from audioop import reverse
 
 '''
 Created on 17 janv. 2018
@@ -12,26 +13,36 @@ Created on 17 janv. 2018
 
 import pygame
 from pygame.locals import *
-
 import math
-
 import numpy as np
 import theano
 import theano.tensor as T
-
 import lasagne
+from Commun.constantes import Constante
+from AlgoGen import algorithme_genetique
 
-tabScores = []
+tabScoresEtParams = []
+compteurIndividus = 1
+compteurGenerations = 1
+name = "TIPE : generation " + str(compteurGenerations) + ", individu " + str(compteurIndividus)
+paramA0 = [np.zeros((Constante.NOMBRE_NEURONES_IN, Constante.NOMBRE_NEURONES_HIDDEN)), np.zeros((Constante.NOMBRE_NEURONES_HIDDEN)), np.zeros((Constante.NOMBRE_NEURONES_HIDDEN, Constante.NOMBRE_NEURONES_OUT)), np.zeros((Constante.NOMBRE_NEURONES_OUT))]
+#paramA0 represente les parametres d'un reseau de neurone initialises a 0
 
 class Affichage():
     
-    def __init__(self):
+    def __init__(self, tabParamsANN = []):
+        
+        global name
+        global compteurIndividus
+        global compteurGenerations
+        
+        name = "TIPE : generation " + str(compteurGenerations) + ", individu " + str(compteurIndividus)
+
         
         #on initialise pygame
         pygame.init()
-        
+                
         self.windowSize = (1280,720)
-        self.name = "TIPE"
         self.imgVoiture = "car.png"
         self.icon = pygame.image.load(self.imgVoiture)
         self.voiture = pygame.image.load(self.imgVoiture)
@@ -40,7 +51,7 @@ class Affichage():
         self.window = pygame.display.set_mode(self.windowSize)
         
         pygame.display.set_icon(self.icon)
-        pygame.display.set_caption(self.name)
+        pygame.display.set_caption(name)
         pygame.display.flip()
         
         self.initCircuit()
@@ -58,20 +69,26 @@ class Affichage():
         self.oldPosY = 300
         
         self.vitesse = 1
-        
         self.angle = 0
         
-        self.tabRetourReseau = []
         self.score = 0
         
-        self.f = self.BuildNeuralNetwork()
+        self.tabParamsAllIndiv = tabParamsANN
         
+        if compteurGenerations > 1:
+            self.tabParamsCurrentIndiv = self.tabParamsAllIndiv[compteurIndividus-1]
+        
+        self.f = self.BuildNeuralNetwork()
+                
         self.run = True
         self.update()
         
         
     def update(self):
-                        
+        
+        global compteurIndividus
+        global compteurGenerations
+        
         while self.run:
                 
             for event in pygame.event.get():
@@ -90,8 +107,6 @@ class Affichage():
                 self.rotation(self.angle+1)
             
             self.move()
-
-            
                         
             self.window.fill(pygame.Color("black")) #remet tout en noir
             self.afficherCircuit()
@@ -111,17 +126,26 @@ class Affichage():
             
             
         if not(self.run):
-            tabScores.append(self.score)
-            print(tabScores)
-            Affichage()
             
-            
+            tabScoresEtParams.append((self.score, self.paramsReseau))
+        
+            if compteurIndividus % Constante.NOMBRE_INDIVIDUS == 0:
+                compteurGenerations += 1
+                compteurIndividus = 0
+                
+                listeTriee = algorithme_genetique.triIndividus(tabScoresEtParams)
+                self.tabParamsAllIndiv = algorithme_genetique.croisements(listeTriee)
+                
+            compteurIndividus += 1
+            Affichage(self.tabParamsAllIndiv)
+    
+    
     def initCircuit(self):
         
         #on remplit la liste circuit avec tous les points composant le circuit
         self.circuit = []
         for i in range(self.windowSize[0]):
-            for y in [199,200,201,399,400,401]: #ajoute les 6 fonction au tableau
+            for y in [199,200,201,399,400,401]: #ajoute les 6 fonctions au tableau
                 self.circuit.append((i,(int(100*math.sin(i*0.01))+y)))
         
         for i in range(200): #ajoute les lignes de depart et d arrivee
@@ -148,6 +172,7 @@ class Affichage():
         if self.positionY <= self.oldPosY - 1:
             self.positionVoiture = self.positionVoiture.move(0,-1)
             self.oldPosY -= 1
+            
             
     def afficherCircuit(self):
         for i in range(self.windowSize[0]):
@@ -247,32 +272,35 @@ class Affichage():
     
         
     def sommeRGB(self, tab):
-            return (tab[0]+tab[1]+tab[2])
+        return (tab[0]+tab[1]+tab[2])
     
     
-    def BuildNeuralNetwork(self):
-    
-        W_init = np.random.normal(0, 0.1, (5, 10))
+    def BuildNeuralNetwork(self):        
+        
+        global compteurGenerations
+        
+        W_init = np.random.normal(0, 0.1, (Constante.NOMBRE_NEURONES_IN, Constante.NOMBRE_NEURONES_HIDDEN))
         #b_init = np.random.normal(0, 0.1, (10,))
         
         #print(W_init)
         #print(b_init)
         
-        W_output = np.random.normal(0, 0.1, (10, 1))
+        W_output = np.random.normal(0, 0.1, (Constante.NOMBRE_NEURONES_HIDDEN, Constante.NOMBRE_NEURONES_OUT))
         #b_output = np.random.normal(0, 0.1, (1,))
-        
+            
         x = T.matrix('x')
         
-        l_in = lasagne.layers.InputLayer((1,5), name="input_layer", nonlinearity=lasagne.nonlinearities.ScaledTanh(scale_in = math.pi, scale_out = math.pi), input_var=x)
-        l_hidden = lasagne.layers.DenseLayer(l_in, 10, name="hidden_layer", nonlinearity=lasagne.nonlinearities.ScaledTanh(scale_in = math.pi, scale_out = math.pi), W=W_init)
-        l_out = lasagne.layers.DenseLayer(l_hidden, 1, name="output_layer", nonlinearity=lasagne.nonlinearities.ScaledTanh(scale_in = math.pi, scale_out = math.pi), W=W_output)
+        l_in = lasagne.layers.InputLayer((1, Constante.NOMBRE_NEURONES_IN), name="input_layer", nonlinearity=lasagne.nonlinearities.ScaledTanh(scale_in = math.pi, scale_out = math.pi), input_var=x)
+        l_hidden = lasagne.layers.DenseLayer(l_in, Constante.NOMBRE_NEURONES_HIDDEN, name="hidden_layer", nonlinearity=lasagne.nonlinearities.ScaledTanh(scale_in = math.pi, scale_out = math.pi), W=W_init)
+        l_out = lasagne.layers.DenseLayer(l_hidden, Constante.NOMBRE_NEURONES_OUT, name="output_layer", nonlinearity=lasagne.nonlinearities.ScaledTanh(scale_in = math.pi, scale_out = math.pi), W=W_output)
         y = lasagne.layers.get_output(l_out)
         
         f = theano.function([x], y)
         
-        paramsReseau = lasagne.layers.get_all_param_values(l_out)
+        if compteurGenerations > 1:
+            lasagne.layers.set_all_param_values(l_out, self.tabParamsCurrentIndiv)
         
-        #print(paramsReseau)
+        self.paramsReseau = lasagne.layers.get_all_param_values(l_out)
         
         return f
     
@@ -282,8 +310,4 @@ class Affichage():
         #print(f(inputNet))
         return self.f(inputNet)
     
-    
-    def algoGen(self):
-        pass
-
-Affichage()        
+Affichage()
