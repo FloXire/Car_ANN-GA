@@ -16,4 +16,4 @@ class Constante():
     NOMBRE_NEURONES_HIDDEN = 3
     NOMBRE_NEURONES_OUT = 1
     
-    CHANCE_MUTATION = 0.01
+    CHANCE_MUTATION = 0.1

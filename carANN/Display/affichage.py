@@ -88,6 +88,7 @@ class Affichage():
         
         global compteurIndividus
         global compteurGenerations
+        global tabScoresEtParams
         
         while self.run:
                 
@@ -128,13 +129,16 @@ class Affichage():
         if not(self.run):
             
             tabScoresEtParams.append((self.score, self.paramsReseau))
-        
+            
             if compteurIndividus % Constante.NOMBRE_INDIVIDUS == 0:
                 compteurGenerations += 1
                 compteurIndividus = 0
                 
                 listeTriee = algorithme_genetique.triIndividus(tabScoresEtParams)
-                self.tabParamsAllIndiv = algorithme_genetique.croisements(listeTriee)
+                listeCroisee = algorithme_genetique.croisements(listeTriee)
+                self.tabParamsAllIndiv = algorithme_genetique.mutations(listeCroisee)
+                
+                tabScoresEtParams = []
                 
             compteurIndividus += 1
             Affichage(self.tabParamsAllIndiv)

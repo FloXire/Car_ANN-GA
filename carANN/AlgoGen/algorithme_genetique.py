@@ -36,9 +36,6 @@ def croisements(tabParams):
             individu1 = np.random.randint(Constante.NOMBRE_INDIVIDUS_CROISEMENT) 
             individu2 = np.random.randint(Constante.NOMBRE_INDIVIDUS_CROISEMENT)
         
-        print("individu 1 : " + str(individu1))
-        print("individu 2 : " + str(individu2))
-        
         tabPairesParents.append([individu1, individu2])
         
         j=0
@@ -77,9 +74,30 @@ def croisements(tabParams):
             j += 1
         
         tabParamsApresCroisement.append(nouvelIndividu)
-            
+        
     return tabParamsApresCroisement
 
 
-def mutations(tabParamsAllIndiv):
-    pass  
+def mutations(listeCroisee):
+    
+    tabAvecMutations = listeCroisee[:] #limitation des effets de bords
+        
+    for i in range(1, len(listeCroisee)): #on ne veut pas de mutations pour le meilleur individu qui reste identique a la generation suivante
+        for j in range(0, 4, 2):
+            
+            if j == 0:
+                for k in range(Constante.NOMBRE_NEURONES_IN):
+                    for l in range(Constante.NOMBRE_NEURONES_HIDDEN):
+                        if np.random.random() < Constante.CHANCE_MUTATION:
+                            tabAvecMutations[i][j][k][l] = np.random.normal(0, 0.1)
+                            print("une mutation a eu lieu en : " + str(i) + ", " + str(j) + ", " + str(k) + ", " + str(l))
+            
+            elif j == 2:
+                for k in range(Constante.NOMBRE_NEURONES_HIDDEN):
+                    for l in range(Constante.NOMBRE_NEURONES_OUT):
+                        if np.random.random() < Constante.CHANCE_MUTATION:
+                            tabAvecMutations[i][j][k][l] = np.random.normal(0, 0.1)
+                            print("Une mutation a eu lieu en " + str(i) + ", " + str(j) + ", " + str(k) + ", " + str(l))
+                            
+    return tabAvecMutations
+
