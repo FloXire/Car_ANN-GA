@@ -97,7 +97,7 @@ def mutations(listeCroisee):
                     for l in range(Constante.NOMBRE_NEURONES_OUT):
                         if np.random.random() < Constante.CHANCE_MUTATION:
                             tabAvecMutations[i][j][k][l] = np.random.normal(0, 0.1)
-                            print("Une mutation a eu lieu en " + str(i) + ", " + str(j) + ", " + str(k) + ", " + str(l))
+                            print("Une mutation a eu lieu en : " + str(i) + ", " + str(j) + ", " + str(k) + ", " + str(l))
                             
     return tabAvecMutations
 
