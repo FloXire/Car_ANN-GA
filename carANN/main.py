@@ -11,4 +11,3 @@ def launchRandomANN():
 
 if __name__ == '__main__':
     launchRandomANN()
-    
