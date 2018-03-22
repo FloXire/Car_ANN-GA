@@ -5,17 +5,17 @@ Created on 15 mars 2018
 '''
 
 import pygame
-from pygame.locals import *
+from pygame.locals import*
+import json
 
 class DrawCircuit(object):
-
 
     def __init__(self):
         
         name = "Dessinateur de circuit"
         
         pygame.init()
-                
+        
         self.windowSize = (1600,900)
         
         self.window = pygame.display.set_mode(self.windowSize)
@@ -29,19 +29,19 @@ class DrawCircuit(object):
         self.update()
         
         
+        
     def update(self):
         
         while self.run:
-                
+        
             for event in pygame.event.get():
                 if event.type == QUIT:
                     self.run = False
-                
-                if event.type == KEYDOWN:
                     
+                if event.type == KEYDOWN:
                     if event.key == K_s:
                         self.save()
-                        
+
             if pygame.key.get_pressed()[K_SPACE]:
                 pygame.draw.circle(self.window, pygame.Color("white"), pygame.mouse.get_pos(), int(self.epaisseurCircuit/2), int(self.epaisseurCircuit/2))
                 
@@ -52,8 +52,11 @@ class DrawCircuit(object):
             
             
     def save(self):
+
         circuit = []
-        
+
+        file = open("circuits.txt", "w")
+
         for j in range(1, self.windowSize[1]-1):
             for i in range(1, self.windowSize[0]-1):
                 point = False
@@ -63,8 +66,8 @@ class DrawCircuit(object):
                             if self.window.get_at((i+a, j+b)) == (255, 255, 255, 255):
                                 point = True
                     if point == True:
-                        circuit.append((i,j))
-                        self.window.set_at((i,j), pygame.Color("red"))
+                        circuit.append((i, j))
+                        self.window.set_at((i, j), pygame.Color("red"))
                         pygame.display.flip()
                         
                         
@@ -75,8 +78,10 @@ class DrawCircuit(object):
         pygame.display.flip()
          
         print(circuit)
-            
         
+        json.dump(circuit, file)
+
+        file.close()
         
-        
+
 DrawCircuit()
