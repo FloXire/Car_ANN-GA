@@ -73,7 +73,7 @@ class Affichage():
         self.oldPosX = self.initCarPosition[0]
         self.oldPosY = self.initCarPosition[1]
         
-        self.vitesse = 1
+        self.vitesse = 10
         self.angle = 0
         
         self.score = 0
@@ -133,7 +133,9 @@ class Affichage():
                 self.tabParamsAllIndiv = algorithme_genetique.mutations(listeCroisee)
                 
                 tabScoresEtParams = []
-                
+            
+            print(len(self.tabParamsAllIndiv))
+            
             compteurIndividus += 1
             Affichage(self.tabParamsAllIndiv)
     
@@ -165,23 +167,20 @@ class Affichage():
         self.positionX += self.vitesse*math.cos(math.radians(self.angle))
         self.positionY += self.vitesse*-math.sin(math.radians(self.angle)) #sinus negatif car axe des y inverse dans pygame
         
-        #on verifie si la position de la voiture depasse de 1 son ancienne position
-        if self.positionX >= self.oldPosX + 1:
-            self.positionVoiture = self.positionVoiture.move(1,0)
-            self.oldPosX += 1
-        if self.positionX <= self.oldPosX - 1:
-            self.positionVoiture = self.positionVoiture.move(-1,0)
-            self.oldPosX -= 1
-        if self.positionY >= self.oldPosY + 1:
-            self.positionVoiture = self.positionVoiture.move(0,1)
-            self.oldPosY += 1
-        if self.positionY <= self.oldPosY - 1:
-            self.positionVoiture = self.positionVoiture.move(0,-1)
-            self.oldPosY -= 1
+        #on verifie si la position de la voiture depasse de self.vitesse son ancienne position
+        if self.positionX >= self.oldPosX + self.vitesse:
+            self.positionVoiture = self.positionVoiture.move(self.vitesse,0)
+            self.oldPosX += self.vitesse
+        if self.positionX <= self.oldPosX - self.vitesse:
+            self.positionVoiture = self.positionVoiture.move(-self.vitesse,0)
+            self.oldPosX -= self.vitesse
+        if self.positionY >= self.oldPosY + self.vitesse:
+            self.positionVoiture = self.positionVoiture.move(0,self.vitesse)
+            self.oldPosY += self.vitesse
+        if self.positionY <= self.oldPosY - self.vitesse:
+            self.positionVoiture = self.positionVoiture.move(0,-self.vitesse)
+            self.oldPosY -= self.vitesse
             
-            
-
-
             
     def getValeursCapteurs(self):
         
@@ -250,7 +249,7 @@ class Affichage():
                 self.run = False
         
         for distance in self.distances:
-            if distance <= 2:
+            if distance <= 2*self.vitesse:
                 self.run = False
                 #return self.score
             
@@ -313,4 +312,3 @@ class Affichage():
         #print(f(inputNet))
         return self.f(inputNet)
     
-Affichage()
