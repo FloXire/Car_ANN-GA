@@ -3,8 +3,6 @@ Created on 23 fevr. 2018
 
 @author: flo-1
 '''
-from audioop import reverse
-from winioctlcon import BusTypeiScsi
 
 '''
 Created on 17 janv. 2018
@@ -20,6 +18,7 @@ import theano
 import theano.tensor as T
 import lasagne
 import json
+import sys
 
 from Commun.constantes import Constante
 from AlgoGen import algorithme_genetique
@@ -30,6 +29,9 @@ compteurGenerations = 1
 name = "TIPE : generation " + str(compteurGenerations) + ", individu " + str(compteurIndividus)
 paramA0 = [np.zeros((Constante.NOMBRE_NEURONES_IN, Constante.NOMBRE_NEURONES_HIDDEN)), np.zeros((Constante.NOMBRE_NEURONES_HIDDEN)), np.zeros((Constante.NOMBRE_NEURONES_HIDDEN, Constante.NOMBRE_NEURONES_OUT)), np.zeros((Constante.NOMBRE_NEURONES_OUT))]
 #paramA0 represente les parametres d'un reseau de neurone initialises a 0
+
+#theano.config.compute_test_value = 'warn'
+sys.setrecursionlimit(10000)
 
 class Affichage():
     
@@ -73,7 +75,7 @@ class Affichage():
         self.oldPosX = self.initCarPosition[0]
         self.oldPosY = self.initCarPosition[1]
         
-        self.vitesse = 10
+        self.vitesse = 20
         self.angle = 0
         
         self.score = 0
@@ -100,7 +102,22 @@ class Affichage():
             for event in pygame.event.get():
                 if event.type == QUIT:
                     self.run = False
-            
+                    this=sys.modules[__name__]
+                    for n in dir():
+                        if n[0]!='_': delattr(this, n)
+                    
+
+                    del self.angle
+                    del self.circuit
+                    del self.distances
+                    del self.f
+                    del self.icon
+                    del self.imgVoiture
+                    del self.initCarPosition
+                    del self.oldPosX
+                    
+                    
+                                
             self.move()
                         
             self.window.fill(pygame.Color("black")) #remet tout en noir
@@ -133,9 +150,7 @@ class Affichage():
                 self.tabParamsAllIndiv = algorithme_genetique.mutations(listeCroisee)
                 
                 tabScoresEtParams = []
-            
-            print(len(self.tabParamsAllIndiv))
-            
+                        
             compteurIndividus += 1
             Affichage(self.tabParamsAllIndiv)
     
