@@ -61,7 +61,7 @@ class Affichage():
         
         self.initCircuit()
         
-        self.initCarPosition = (60,200)
+        self.initCarPosition = (200,50)
         
         self.positionVoiture = self.voiture.get_rect()
         self.window.blit(self.voiture, (0,0))
@@ -75,7 +75,7 @@ class Affichage():
         self.oldPosX = self.initCarPosition[0]
         self.oldPosY = self.initCarPosition[1]
         
-        self.vitesse = 20
+        self.vitesse = 1
         self.angle = 0
         
         self.score = 0
@@ -102,21 +102,6 @@ class Affichage():
             for event in pygame.event.get():
                 if event.type == QUIT:
                     self.run = False
-                    this=sys.modules[__name__]
-                    for n in dir():
-                        if n[0]!='_': delattr(this, n)
-                    
-
-                    del self.angle
-                    del self.circuit
-                    del self.distances
-                    del self.f
-                    del self.icon
-                    del self.imgVoiture
-                    del self.initCarPosition
-                    del self.oldPosX
-                    
-                    
                                 
             self.move()
                         
@@ -124,15 +109,11 @@ class Affichage():
             self.afficherCircuit()
             self.window.blit(self.voiture, self.positionVoiture)
             
-            self.getValeursCapteurs()
-        
-            """self.tabRetourReseau.append(retourReseau(self.distances)[0][0])
-            print(sum(self.tabRetourReseau)/float(len(self.tabRetourReseau)))"""
-            
+            self.getValeursCapteurs()            
             
             self.rotation(self.angle + self.retourReseau(self.distances)[0][0])
             
-            #print(self.score)
+            self.score += 1
             
             pygame.display.flip() #On affiche tous les elements a l ecran 
             
@@ -158,8 +139,6 @@ class Affichage():
     def initCircuit(self):
         
         file = open("CircuitCreator/circuits.txt", "r")
-        
-        #on remplit la liste circuit avec tous les points composant le circuit
 
         self.circuit = json.load(file)
         
@@ -169,11 +148,9 @@ class Affichage():
     def afficherCircuit(self):
         for pos in self.circuit:
             self.window.set_at(pos, pygame.Color("white"))
-        """
-        for i in range(self.windowSize[0]):
-            for y in [100,101,250,251]:
-                self.window.set_at((i,(int(100*math.sin(i*0.01))+y)), pygame.Color("white"))
-        """
+            
+        for i in range(150):
+            self.window.set_at((350,i+22), pygame.Color("blue"))
         
     # fonction gerant le deplacement
     def move(self):
@@ -246,20 +223,15 @@ class Affichage():
                 distanceCapteur[capteur] = math.sqrt((intersection[0] - debutRayon[0])**2+(intersection[1] - debutRayon[1])**2)
     
     
-                """for capteur in [RAVD, RAVG, RARD, RARG]:
+                for capteur in [RAVD, RAVG, RARD, RARG]:
                     if capteur in self.circuit:
                         #print("sortie de piste")
                         self.window.set_at(capteur, pygame.Color("red"))
                     else:
-                        self.window.set_at(capteur, pygame.Color("green"))"""
+                        self.window.set_at(capteur, pygame.Color("green"))
                 
                 self.distances = distanceCapteur #tableau 1*5 
                 
-                self.scoreTmp = self.positionVoiture.center[0]
-                
-                if self.scoreTmp > self.score:
-                    self.score = self.scoreTmp
-                    
             except IndexError:
                 self.run = False
         
@@ -267,6 +239,11 @@ class Affichage():
             if distance <= 2*self.vitesse:
                 self.run = False
                 #return self.score
+                
+        #self.window.set_at((int(self.positionVoiture.center[0] + 75*math.cos(math.radians(self.angle)) + 0*math.sin(math.radians(self.angle))), int(self.positionVoiture.center[1] + 0*math.cos(math.radians(self.angle)) - 75*math.sin(math.radians(self.angle)))), pygame.Color("blue"))
+        if (int(self.positionVoiture.center[0] + 75*math.cos(math.radians(self.angle))), int(self.positionVoiture.center[1] - 75*math.sin(math.radians(self.angle)))) in [(350,i+22) for i in range(150)] and self.score > 1000:
+            print("Ligne touchee")
+            self.run = False
             
         
     #fonction permettant de faire tourner la voiture
