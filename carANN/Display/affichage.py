@@ -107,6 +107,7 @@ class Affichage():
                         
             self.window.fill(pygame.Color("black")) #remet tout en noir
             self.afficherCircuit()
+            
             self.window.blit(self.voiture, self.positionVoiture)
             
             self.getValeursCapteurs()            
