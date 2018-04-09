@@ -35,7 +35,7 @@ class DrawCircuit(object):
         self.circuit = []
         self.positionVoiture = (0,0)
         self.angleVoiture = 0
-        self.depart = []
+        self.ligneDepart = []
         
         self.circuitOK = False
         self.voitureOK = False
@@ -54,23 +54,23 @@ class DrawCircuit(object):
                     self.run = False
                     
                 if event.type == KEYDOWN:
-                    if event.key == K_c:
+                    if event.key == K_c and self.circuitOK == False and self.voitureOK == False:
                         self.creerCircuit()
                         
-                    if event.key == K_s and self.circuitOK == True and self.voitureOK == True:
-                        self.save()
-                        
-                    if event.key == K_SPACE and self.circuitOK == True:
+                    if event.key == K_SPACE and self.circuitOK == True and self.voitureOK == False:
                         print(self.positionVoiture)
                         print(pygame.mouse.get_pos())
                         print(self.angleVoiture)
-                        print(self.depart)
+                        
                         self.voitureOK = True
+                        
+                    if event.key == K_SPACE and self.circuitOK == True and self.voitureOK == True:
+                        self.save()
 
             if pygame.key.get_pressed()[K_SPACE] and self.circuitOK == False:
                 pygame.draw.circle(self.window, pygame.Color("white"), pygame.mouse.get_pos(), int(self.epaisseurCircuit/2), int(self.epaisseurCircuit/2))
             
-            if self.circuitOK == True:
+            if self.circuitOK == True and self.voitureOK == False:
                 
                 if pygame.key.get_pressed()[K_LEFT]:
                     self.rotation(self.angleVoiture+1)
@@ -120,25 +120,71 @@ class DrawCircuit(object):
         self.positionVoiture = self.voiture.get_rect(center = pygame.mouse.get_pos())
         
         posVoiture = (self.positionVoiture[0],self.positionVoiture[1])
-        debutLigne = (int(self.positionVoiture.center[0] + 75*math.cos(math.radians(self.angleVoiture)) - 100*math.sin(math.radians(self.angleVoiture))), int(self.positionVoiture.center[1] - 100*math.cos(math.radians(self.angleVoiture)) - 75*math.sin(math.radians(self.angleVoiture))))
-        finLigne = (int(self.positionVoiture.center[0] + 75*math.cos(math.radians(self.angleVoiture)) + 100*math.sin(math.radians(self.angleVoiture))), int(self.positionVoiture.center[1] + 100*math.cos(math.radians(self.angleVoiture)) - 75*math.sin(math.radians(self.angleVoiture))))
         
+        #partie permettant de placer la ligne de depart
+        intersectionDebut = False
+        intersectionFin = False
+        
+        try :
+        
+            for i in range(200):
+                if self.window.get_at((int(self.positionVoiture.center[0] + 78*math.cos(math.radians(self.angleVoiture)) - (i+1)*math.sin(math.radians(self.angleVoiture))), int(self.positionVoiture.center[1] - (i+1)*math.cos(math.radians(self.angleVoiture)) - 78*math.sin(math.radians(self.angleVoiture))))) == (0, 0, 0, 255):
+                    debutLigne = (int(self.positionVoiture.center[0] + 78*math.cos(math.radians(self.angleVoiture)) - i*math.sin(math.radians(self.angleVoiture))), int(self.positionVoiture.center[1] - i*math.cos(math.radians(self.angleVoiture)) - 78*math.sin(math.radians(self.angleVoiture))))
+                    intersectionDebut = True
+                    break
+    
+            for i in range(200):
+                if self.window.get_at((int(self.positionVoiture.center[0] + 78*math.cos(math.radians(self.angleVoiture)) + (i+1)*math.sin(math.radians(self.angleVoiture))), int(self.positionVoiture.center[1] + (i+1)*math.cos(math.radians(self.angleVoiture)) - 78*math.sin(math.radians(self.angleVoiture))))) == (0, 0, 0, 255):
+                    finLigne = (int(self.positionVoiture.center[0] + 78*math.cos(math.radians(self.angleVoiture)) + (i)*math.sin(math.radians(self.angleVoiture))), int(self.positionVoiture.center[1] + (i)*math.cos(math.radians(self.angleVoiture)) - 78*math.sin(math.radians(self.angleVoiture))))
+                    intersectionFin = True
+                    break
+        
+        except IndexError:
+            pass
+
+        if intersectionDebut == False:
+            debutLigne = (int(self.positionVoiture.center[0] + 78*math.cos(math.radians(self.angleVoiture)) - 100*math.sin(math.radians(self.angleVoiture))), int(self.positionVoiture.center[1] - 100*math.cos(math.radians(self.angleVoiture)) - 78*math.sin(math.radians(self.angleVoiture))))
+        if intersectionFin == False:
+            finLigne = (int(self.positionVoiture.center[0] + 78*math.cos(math.radians(self.angleVoiture)) + 100*math.sin(math.radians(self.angleVoiture))), int(self.positionVoiture.center[1] + 100*math.cos(math.radians(self.angleVoiture)) - 78*math.sin(math.radians(self.angleVoiture))))
+
         #on dessine la ligne de depart devant la voiture
-        pygame.draw.line(self.window, pygame.Color("blue"), debutLigne, finLigne, 1)
+        if intersectionDebut == True and intersectionFin == True:
+            pygame.draw.line(self.window, pygame.Color("blue"), debutLigne, finLigne, 3)
+        else:
+            pygame.draw.line(self.window, pygame.Color("red"), debutLigne, finLigne, 3)
         
         self.window.blit(self.voiture, self.positionVoiture)
         
         
-        
     def save(self):
+        
+        for j in range(0, self.windowSize[1]):
+            for i in range(0, self.windowSize[0]):
+                if self.window.get_at((i, j)) == (0, 0, 255, 255):
+                    self.ligneDepart.append((i, j))
+                                            
+        print(self.ligneDepart)
         
         if self.circuit != [] and self.voiture != []:
             
+            file = open("circuits.txt", "r")
+            donneesFichier = json.load(file)
+            file.close()
+            
+            if donneesFichier == "":
+                donneesFichier = []
+            
             file = open("circuits.txt", "w")
+            
+            donneesCircuit = {"Circuit" : self.circuit, "PositionVoiture" : (self.positionVoiture[0], self.positionVoiture[1]), "AngleVoiture" : self.angleVoiture, "LigneDepart" : self.ligneDepart}
+            
+            donneesFichier.append(donneesCircuit)
         
-            json.dump(self.circuit, file)
+            json.dump(donneesFichier, file)
             
             file.close()
+            
+            print("Enregistrement effectue avec succes")
         
         else:
             print("Veuillez vous assurer d avoir creer un circuit et d avoir possitionner la voiture.")

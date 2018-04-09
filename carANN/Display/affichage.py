@@ -36,17 +36,16 @@ sys.setrecursionlimit(10000)
 class Affichage():
     
     def __init__(self, tabParamsANN = []):
-        
+
         global name
         global compteurIndividus
         global compteurGenerations
-        
+
         name = "TIPE : generation " + str(compteurGenerations) + ", individu " + str(compteurIndividus)
 
-        
         #on initialise pygame
         pygame.init()
-                
+   
         self.windowSize = (1600,900)
         self.imgVoiture = "car.png"
         self.icon = pygame.image.load(self.imgVoiture)
@@ -59,9 +58,8 @@ class Affichage():
         pygame.display.set_caption(name)
         pygame.display.flip()
         
+        self.numeroCircuit = 0
         self.initCircuit()
-        
-        self.initCarPosition = (200,50)
         
         self.positionVoiture = self.voiture.get_rect()
         self.window.blit(self.voiture, (0,0))
@@ -76,7 +74,6 @@ class Affichage():
         self.oldPosY = self.initCarPosition[1]
         
         self.vitesse = 1
-        self.angle = 0
         
         self.score = 0
         
@@ -110,7 +107,7 @@ class Affichage():
             
             self.window.blit(self.voiture, self.positionVoiture)
             
-            self.getValeursCapteurs()            
+            self.getValeursCapteurs()
             
             self.rotation(self.angle + self.retourReseau(self.distances)[0][0])
             
@@ -140,18 +137,30 @@ class Affichage():
     def initCircuit(self):
         
         file = open("CircuitCreator/circuits.txt", "r")
-
-        self.circuit = json.load(file)
+        
+        donneesCircuits = json.load(file)
+        
+        self.circuit = donneesCircuits[self.numeroCircuit]["Circuit"]
+        
+        self.angle = donneesCircuits[self.numeroCircuit]["AngleVoiture"]
+        
+        self.initCarPosition = donneesCircuits[self.numeroCircuit]["PositionVoiture"]
+        
+        self.ligneDepart = donneesCircuits[self.numeroCircuit]["LigneDepart"]
         
         file.close()
         
 
     def afficherCircuit(self):
+        
+        #affiche le circuit
         for pos in self.circuit:
             self.window.set_at(pos, pygame.Color("white"))
             
-        for i in range(150):
-            self.window.set_at((350,i+22), pygame.Color("blue"))
+        #affiche la ligne de depart
+        for pos in self.ligneDepart:
+            self.window.set_at(pos, pygame.Color("blue"))
+
         
     # fonction gerant le deplacement
     def move(self):
