@@ -187,7 +187,7 @@ class DrawCircuit(object):
             print("Enregistrement effectue avec succes")
         
         else:
-            print("Veuillez vous assurer d avoir creer un circuit et d avoir possitionner la voiture.")
+            print("Veuillez vous assurer d avoir cree un circuit et d avoir positionner la voiture.")
             
     
     def rotation(self, angle):

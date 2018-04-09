@@ -13,7 +13,7 @@ class Constante():
     NOMBRE_INDIVIDUS_CROISEMENT = NOMBRE_INDIVIDUS//2 #il s'agit du nombre d'individus qui seront pris pour parents de la nouvelle generation
         
     NOMBRE_NEURONES_IN = 5
-    NOMBRE_NEURONES_HIDDEN = 10
+    NOMBRE_NEURONES_HIDDEN = 3
     NOMBRE_NEURONES_OUT = 1
     
     CHANCE_MUTATION = 0.3

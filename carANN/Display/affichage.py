@@ -63,7 +63,7 @@ class Affichage():
         pygame.display.set_caption(name)
         pygame.display.flip()
         
-        self.numeroCircuit = 0
+        self.numeroCircuit = 0 #permet de pouvoir changer de circuit a tout moment, par exemple quand un individu a termine un circuit, on peut le faire rouler sur un autre
         self.initCircuit()
         
         self.positionVoiture = self.voiture.get_rect()
@@ -304,8 +304,9 @@ class Affichage():
             moyenne = 0
             
             for j in range(Constante.NOMBRE_INDIVIDUS-1):
-                moyenne += tabResults[i][j][0]*(1/Constante.NOMBRE_INDIVIDUS)
-                
+                moyenne += tabResults[i][j][0]
+            
+            moyenne /= Constante.NOMBRE_INDIVIDUS
             tabMoyenne.append(moyenne)
             
         
