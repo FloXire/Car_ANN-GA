@@ -3,6 +3,7 @@ Created on 23 fevr. 2018
 
 @author: flo-1
 '''
+from matplotlib.pyplot import ylabel
 
 '''
 Created on 17 janv. 2018
@@ -19,6 +20,7 @@ import theano.tensor as T
 import lasagne
 import json
 import sys
+import matplotlib.pyplot as plt
 
 from Commun.constantes import Constante
 from AlgoGen import algorithme_genetique
@@ -29,6 +31,9 @@ compteurGenerations = 1
 name = "TIPE : generation " + str(compteurGenerations) + ", individu " + str(compteurIndividus)
 paramA0 = [np.zeros((Constante.NOMBRE_NEURONES_IN, Constante.NOMBRE_NEURONES_HIDDEN)), np.zeros((Constante.NOMBRE_NEURONES_HIDDEN)), np.zeros((Constante.NOMBRE_NEURONES_HIDDEN, Constante.NOMBRE_NEURONES_OUT)), np.zeros((Constante.NOMBRE_NEURONES_OUT))]
 #paramA0 represente les parametres d'un reseau de neurone initialises a 0
+
+tabResults = []
+tabResults.append([0]*Constante.NOMBRE_INDIVIDUS)
 
 #theano.config.compute_test_value = 'warn'
 sys.setrecursionlimit(10000)
@@ -73,11 +78,13 @@ class Affichage():
         self.oldPosX = self.initCarPosition[0]
         self.oldPosY = self.initCarPosition[1]
         
-        self.vitesse = 1
+        self.vitesse = 2
         
         self.score = 0
         
         self.tabParamsAllIndiv = tabParamsANN
+        
+        self.tourComplet = False
         
         if compteurGenerations > 1:
             self.tabParamsCurrentIndiv = self.tabParamsAllIndiv[compteurIndividus-1]
@@ -93,12 +100,17 @@ class Affichage():
         global compteurIndividus
         global compteurGenerations
         global tabScoresEtParams
+        global tabResults
         
         while self.run:
                 
             for event in pygame.event.get():
                 if event.type == QUIT:
                     self.run = False
+                    
+                if event.type == KEYDOWN:
+                    if event.key == K_r:
+                        self.afficherResultats()
                                 
             self.move()
                         
@@ -120,15 +132,17 @@ class Affichage():
             
             tabScoresEtParams.append((self.score, self.paramsReseau))
             
+            tabResults[compteurGenerations-1][compteurIndividus-1] = [self.score, self.tourComplet]
+            
             if compteurIndividus % Constante.NOMBRE_INDIVIDUS == 0:
                 compteurGenerations += 1
                 compteurIndividus = 0
+            
+                tabResults.append([0]*Constante.NOMBRE_INDIVIDUS)
                 
                 listeTriee = algorithme_genetique.triIndividus(tabScoresEtParams)
                 listeCroisee = algorithme_genetique.croisements(listeTriee)
                 self.tabParamsAllIndiv = algorithme_genetique.mutations(listeCroisee)
-                
-                tabScoresEtParams = []
                         
             compteurIndividus += 1
             Affichage(self.tabParamsAllIndiv)
@@ -236,6 +250,7 @@ class Affichage():
                 for capteur in [RAVD, RAVG, RARD, RARG]:
                     if capteur in self.circuit:
                         #print("sortie de piste")
+                        #self.run = False
                         self.window.set_at(capteur, pygame.Color("red"))
                     else:
                         self.window.set_at(capteur, pygame.Color("green"))
@@ -251,8 +266,9 @@ class Affichage():
                 #return self.score
                 
         #self.window.set_at((int(self.positionVoiture.center[0] + 75*math.cos(math.radians(self.angle)) + 0*math.sin(math.radians(self.angle))), int(self.positionVoiture.center[1] + 0*math.cos(math.radians(self.angle)) - 75*math.sin(math.radians(self.angle)))), pygame.Color("blue"))
-        if (int(self.positionVoiture.center[0] + 75*math.cos(math.radians(self.angle))), int(self.positionVoiture.center[1] - 75*math.sin(math.radians(self.angle)))) in [(350,i+22) for i in range(150)] and self.score > 1000:
+        if (int(self.positionVoiture.center[0] + 75*math.cos(math.radians(self.angle))), int(self.positionVoiture.center[1] - 75*math.sin(math.radians(self.angle)))) in self.ligneDepart and self.score > 1000:
             print("Ligne touchee")
+            self.tourComplet = True
             self.run = False
             
         
@@ -277,6 +293,30 @@ class Affichage():
         
     def sommeRGB(self, tab):
         return (tab[0]+tab[1]+tab[2])
+    
+    def afficherResultats(self):
+        global compteurIndividus
+        global compteurGenerations
+        global tabResults
+        
+        tabMoyenne = []
+        for i in range(compteurGenerations-1) :
+            moyenne = 0
+            
+            for j in range(Constante.NOMBRE_INDIVIDUS-1):
+                moyenne += tabResults[i][j][0]*(1/Constante.NOMBRE_INDIVIDUS)
+                
+            tabMoyenne.append(moyenne)
+            
+        
+        plt.close()
+        fig = plt.figure()
+        ax = plt.axes()
+        plt.title("Score moyen en fonction de la generation")
+        ax = ax.set(xlabel="Numero de la generation", ylabel="Score moyen")
+        
+        plt.plot([x for x in range(1, len(tabResults))], tabMoyenne)
+        plt.show()
     
     
     def BuildNeuralNetwork(self):        
