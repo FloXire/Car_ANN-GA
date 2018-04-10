@@ -8,6 +8,8 @@ class Constante():
     '''
     classdocs
     '''
+    
+    DISTANCE_MAX_CAPTEURS = 60
 
     NOMBRE_INDIVIDUS = 10 #il faut au minimum 8 individus par generation pour que pouvoir recréer (NOMBRE_INDIVIDU - NOMBRE_INDIVIDU//2) nouveaux individus sans avoir deux paires de parents identiques
     NOMBRE_INDIVIDUS_CROISEMENT = NOMBRE_INDIVIDUS//2 #il s'agit du nombre d'individus qui seront pris pour parents de la nouvelle generation

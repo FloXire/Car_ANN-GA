@@ -3,7 +3,6 @@ Created on 23 fevr. 2018
 
 @author: flo-1
 '''
-from matplotlib.pyplot import ylabel
 
 '''
 Created on 17 janv. 2018
@@ -228,7 +227,7 @@ class Affichage():
             try:
             
                 #on lance un rayon jusqu'a ce qu'il rencontre le circuit ou qu'il soit superieur a une certaine valeur
-                while ((self.sommeRGB(self.window.get_at((int(debutRayon[0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(debutRayon[1]+i*-math.sin(math.radians(self.angle + angleCapteur)))))) < 715) and (i <= 60)) :
+                while ((self.sommeRGB(self.window.get_at((int(debutRayon[0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(debutRayon[1]+i*-math.sin(math.radians(self.angle + angleCapteur)))))) < 715) and (i <= Constante.DISTANCE_MAX_CAPTEURS)) :
                     
                     i+=1                
                                     
@@ -239,7 +238,7 @@ class Affichage():
                     """
                 intersection = (int(debutRayon[0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(debutRayon[1]+i*-math.sin(math.radians(self.angle + angleCapteur))))
             
-                if i<=60:
+                if i <= Constante.DISTANCE_MAX_CAPTEURS:
                     pygame.draw.line(self.window, pygame.Color("red"), debutRayon, intersection, 1)
                 else:
                     pygame.draw.line(self.window, pygame.Color("green"), debutRayon, intersection, 1)
@@ -251,7 +250,6 @@ class Affichage():
                     if capteur in self.circuit:
                         #print("sortie de piste")
                         self.run = False
-                        print("aaaaaaaaaaaaaaaaaa")
                         print(self.sommeRGB(self.window.get_at(capteur)))"""
                 
                 self.distances = distanceCapteur #tableau 1*5 
@@ -259,14 +257,16 @@ class Affichage():
             except IndexError:
                 self.run = False
         
+        i=0
         for distance in self.distances:
-            if distance <= 2*self.vitesse:
+            i += 1
+            if distance <= 2*self.vitesse or ((distance <= 3*self.vitesse) and i == 3):
                 self.run = False
                 #return self.score
                 
         #self.window.set_at((int(self.positionVoiture.center[0] + 75*math.cos(math.radians(self.angle)) + 0*math.sin(math.radians(self.angle))), int(self.positionVoiture.center[1] + 0*math.cos(math.radians(self.angle)) - 75*math.sin(math.radians(self.angle)))), pygame.Color("blue"))
         if self.sommeRGB(self.window.get_at(self.positionVoiture.center)) > 496 and self.score > 1000:
-            print("Ligne touchee")
+            print("Circuit termine")
             self.tourComplet = True
             self.run = False
             
@@ -334,7 +334,7 @@ class Affichage():
             
         x = T.matrix('x')
         
-        l_in = lasagne.layers.InputLayer((1, Constante.NOMBRE_NEURONES_IN), name="input_layer", nonlinearity=lasagne.nonlinearities.ScaledTanh(scale_in = math.pi, scale_out = math.pi), input_var=x)
+        l_in = lasagne.layers.InputLayer((1, Constante.NOMBRE_NEURONES_IN), name="input_layer", input_var=x)
         l_hidden = lasagne.layers.DenseLayer(l_in, Constante.NOMBRE_NEURONES_HIDDEN, name="hidden_layer", nonlinearity=lasagne.nonlinearities.ScaledTanh(scale_in = math.pi, scale_out = math.pi), W=W_init)
         l_out = lasagne.layers.DenseLayer(l_hidden, Constante.NOMBRE_NEURONES_OUT, name="output_layer", nonlinearity=lasagne.nonlinearities.ScaledTanh(scale_in = math.pi, scale_out = math.pi), W=W_output)
         y = lasagne.layers.get_output(l_out)
