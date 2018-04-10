@@ -63,7 +63,7 @@ class Affichage():
         pygame.display.set_caption(name)
         pygame.display.flip()
         
-        self.numeroCircuit = 0 #permet de pouvoir changer de circuit a tout moment, par exemple quand un individu a termine un circuit, on peut le faire rouler sur un autre
+        self.numeroCircuit = 5 #permet de pouvoir changer de circuit a tout moment, par exemple quand un individu a termine un circuit, on peut le faire rouler sur un autre
         self.initCircuit()
         
         self.positionVoiture = self.voiture.get_rect()
@@ -78,7 +78,7 @@ class Affichage():
         self.oldPosX = self.initCarPosition[0]
         self.oldPosY = self.initCarPosition[1]
         
-        self.vitesse = 2
+        self.vitesse = 1
         
         self.score = 0
         
@@ -245,15 +245,14 @@ class Affichage():
                     pygame.draw.line(self.window, pygame.Color("green"), debutRayon, intersection, 1)
                                 
                 distanceCapteur[capteur] = math.sqrt((intersection[0] - debutRayon[0])**2+(intersection[1] - debutRayon[1])**2)
-    
-    
-                for capteur in [RAVD, RAVG, RARD, RARG]:
+                
+                #inutile, ne touche jamais ces capteurs
+                """for capteur in [RAVD, RAVG, RARD, RARG]:
                     if capteur in self.circuit:
                         #print("sortie de piste")
-                        #self.run = False
-                        self.window.set_at(capteur, pygame.Color("red"))
-                    else:
-                        self.window.set_at(capteur, pygame.Color("green"))
+                        self.run = False
+                        print("aaaaaaaaaaaaaaaaaa")
+                        print(self.sommeRGB(self.window.get_at(capteur)))"""
                 
                 self.distances = distanceCapteur #tableau 1*5 
                 
@@ -266,7 +265,7 @@ class Affichage():
                 #return self.score
                 
         #self.window.set_at((int(self.positionVoiture.center[0] + 75*math.cos(math.radians(self.angle)) + 0*math.sin(math.radians(self.angle))), int(self.positionVoiture.center[1] + 0*math.cos(math.radians(self.angle)) - 75*math.sin(math.radians(self.angle)))), pygame.Color("blue"))
-        if (int(self.positionVoiture.center[0] + 75*math.cos(math.radians(self.angle))), int(self.positionVoiture.center[1] - 75*math.sin(math.radians(self.angle)))) in self.ligneDepart and self.score > 1000:
+        if self.sommeRGB(self.window.get_at(self.positionVoiture.center)) > 496 and self.score > 1000:
             print("Ligne touchee")
             self.tourComplet = True
             self.run = False
