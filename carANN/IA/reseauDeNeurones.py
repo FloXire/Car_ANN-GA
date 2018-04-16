@@ -7,8 +7,6 @@ from Commun.constantes import Constante
 
 inputNet = np.array([[-60,-60,-60,-60,-60]])
 
-#print(inputNet.shape)
-
 def aNN():
 
     W_init = np.random.uniform(-0.1, 0.1, (5, 10))

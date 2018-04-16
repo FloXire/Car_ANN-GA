@@ -19,10 +19,13 @@ import theano.tensor as T
 import lasagne
 import json
 import sys
+from matplotlib import ticker
 import matplotlib.pyplot as plt
+import time
 
 from Commun.constantes import Constante
 from AlgoGen import algorithme_genetique
+from Display.traitementResultats import *
 
 tabScoresEtParams = []
 compteurIndividus = 1
@@ -62,7 +65,7 @@ class Affichage():
         pygame.display.set_caption(name)
         pygame.display.flip()
         
-        self.numeroCircuit = 5 #permet de pouvoir changer de circuit a tout moment, par exemple quand un individu a termine un circuit, on peut le faire rouler sur un autre
+        self.numeroCircuit = 0 #permet de pouvoir changer de circuit a tout moment, par exemple quand un individu a termine un circuit, on peut le faire rouler sur un autre
         self.initCircuit()
         
         self.positionVoiture = self.voiture.get_rect()
@@ -77,7 +80,7 @@ class Affichage():
         self.oldPosX = self.initCarPosition[0]
         self.oldPosY = self.initCarPosition[1]
         
-        self.vitesse = 1
+        self.vitesse = 10
         
         self.score = 0
         
@@ -109,7 +112,7 @@ class Affichage():
                     
                 if event.type == KEYDOWN:
                     if event.key == K_r:
-                        self.afficherResultats()
+                        afficherResultats(compteurGenerations, tabResults)
                                 
             self.move()
                         
@@ -143,6 +146,10 @@ class Affichage():
                 listeCroisee = algorithme_genetique.croisements(listeTriee)
                 self.tabParamsAllIndiv = algorithme_genetique.mutations(listeCroisee)
                         
+            if compteurGenerations == Constante.NOMBRE_GENERATIONS_MAX: #On arrete le programme quand on a genere 50 generations
+                enregistrerResultats(compteurGenerations, tabResults)
+                sys.exit()
+            
             compteurIndividus += 1
             Affichage(self.tabParamsAllIndiv)
     
@@ -150,15 +157,11 @@ class Affichage():
     def initCircuit(self):
         
         file = open("CircuitCreator/circuits.txt", "r")
-        
         donneesCircuits = json.load(file)
         
         self.circuit = donneesCircuits[self.numeroCircuit]["Circuit"]
-        
         self.angle = donneesCircuits[self.numeroCircuit]["AngleVoiture"]
-        
         self.initCarPosition = donneesCircuits[self.numeroCircuit]["PositionVoiture"]
-        
         self.ligneDepart = donneesCircuits[self.numeroCircuit]["LigneDepart"]
         
         file.close()
@@ -200,11 +203,11 @@ class Affichage():
     def getValeursCapteurs(self):
         
         #44, 42 et 32 correspondent a des constantes pour la position des capteurs sur la voiture
-        RAVD = (int(self.positionVoiture.center[0] + 44*math.cos(math.radians(self.angle)) + 32*math.sin(math.radians(self.angle))), int(self.positionVoiture.center[1] + 32*math.cos(math.radians(self.angle)) - 44*math.sin(math.radians(self.angle))))
+        """RAVD = (int(self.positionVoiture.center[0] + 44*math.cos(math.radians(self.angle)) + 32*math.sin(math.radians(self.angle))), int(self.positionVoiture.center[1] + 32*math.cos(math.radians(self.angle)) - 44*math.sin(math.radians(self.angle))))
         RAVG = (int(self.positionVoiture.center[0] + 44*math.cos(math.radians(self.angle)) - 32*math.sin(math.radians(self.angle))), int(self.positionVoiture.center[1] - 32*math.cos(math.radians(self.angle)) - 44*math.sin(math.radians(self.angle))))
         RARD = (int(self.positionVoiture.center[0] - 42*math.cos(math.radians(self.angle)) + 32*math.sin(math.radians(self.angle))), int(self.positionVoiture.center[1] + 32*math.cos(math.radians(self.angle)) + 42*math.sin(math.radians(self.angle))))
         RARG = (int(self.positionVoiture.center[0] - 42*math.cos(math.radians(self.angle)) - 32*math.sin(math.radians(self.angle))), int(self.positionVoiture.center[1] - 32*math.cos(math.radians(self.angle)) + 42*math.sin(math.radians(self.angle))))
-        
+        """
         
         #Solution qui fonctionne mais avec des problemes d optimisation
         intersection = [self.positionVoiture.center]*5
@@ -231,11 +234,6 @@ class Affichage():
                     
                     i+=1                
                                     
-                    """if capteur == 1:
-                        print(i)
-                        print(self.window.get_at((int(debutRayon[0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(debutRayon[1]+i*-math.sin(math.radians(self.angle + angleCapteur))))))
-                        print(sommeRGB(self.window.get_at((int(debutRayon[0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(debutRayon[1]+i*-math.sin(math.radians(self.angle + angleCapteur)))))))
-                    """
                 intersection = (int(debutRayon[0]+i*math.cos(math.radians(self.angle + angleCapteur))), int(debutRayon[1]+i*-math.sin(math.radians(self.angle + angleCapteur))))
             
                 if i <= Constante.DISTANCE_MAX_CAPTEURS:
@@ -262,7 +260,6 @@ class Affichage():
             i += 1
             if distance <= 2*self.vitesse or ((distance <= 3*self.vitesse) and i == 3):
                 self.run = False
-                #return self.score
                 
         #self.window.set_at((int(self.positionVoiture.center[0] + 75*math.cos(math.radians(self.angle)) + 0*math.sin(math.radians(self.angle))), int(self.positionVoiture.center[1] + 0*math.cos(math.radians(self.angle)) - 75*math.sin(math.radians(self.angle)))), pygame.Color("blue"))
         if self.sommeRGB(self.window.get_at(self.positionVoiture.center)) > 496 and self.score > 1000:
@@ -292,33 +289,8 @@ class Affichage():
         
     def sommeRGB(self, tab):
         return (tab[0]+tab[1]+tab[2])
-    
-    def afficherResultats(self):
-        global compteurIndividus
-        global compteurGenerations
-        global tabResults
-        
-        tabMoyenne = []
-        for i in range(compteurGenerations-1) :
-            moyenne = 0
             
-            for j in range(Constante.NOMBRE_INDIVIDUS-1):
-                moyenne += tabResults[i][j][0]
             
-            moyenne /= Constante.NOMBRE_INDIVIDUS
-            tabMoyenne.append(moyenne)
-            
-        
-        plt.close()
-        fig = plt.figure()
-        ax = plt.axes()
-        plt.title("Score moyen en fonction de la generation")
-        ax = ax.set(xlabel="Numero de la generation", ylabel="Score moyen")
-        
-        plt.plot([x for x in range(1, len(tabResults))], tabMoyenne)
-        plt.show()
-    
-    
     def BuildNeuralNetwork(self):        
         
         global compteurGenerations
