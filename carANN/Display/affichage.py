@@ -20,12 +20,12 @@ import lasagne
 import json
 import sys
 from matplotlib import ticker
-import matplotlib.pyplot as plt
-import time
+#import matplotlib.pyplot as plt
+#import time
 
 from Commun.constantes import Constante
 from AlgoGen import algorithme_genetique
-from Display.traitementResultats import *
+from Display.traitementResultats import afficherResultats, enregistrerResultats
 
 tabScoresEtParams = []
 compteurIndividus = 1
@@ -80,7 +80,7 @@ class Affichage():
         self.oldPosX = self.initCarPosition[0]
         self.oldPosY = self.initCarPosition[1]
         
-        self.vitesse = 10
+        self.vitesse = 1
         
         self.score = 0
         
@@ -105,7 +105,7 @@ class Affichage():
         global tabResults
         
         while self.run:
-                
+            
             for event in pygame.event.get():
                 if event.type == QUIT:
                     self.run = False
@@ -118,7 +118,6 @@ class Affichage():
                         
             self.window.fill(pygame.Color("black")) #remet tout en noir
             self.afficherCircuit()
-            
             self.window.blit(self.voiture, self.positionVoiture)
             
             self.getValeursCapteurs()
@@ -131,7 +130,7 @@ class Affichage():
             
             
         if not(self.run):
-            
+
             tabScoresEtParams.append((self.score, self.paramsReseau))
             
             tabResults[compteurGenerations-1][compteurIndividus-1] = [self.score, self.tourComplet]
@@ -209,7 +208,6 @@ class Affichage():
         RARG = (int(self.positionVoiture.center[0] - 42*math.cos(math.radians(self.angle)) - 32*math.sin(math.radians(self.angle))), int(self.positionVoiture.center[1] - 32*math.cos(math.radians(self.angle)) + 42*math.sin(math.radians(self.angle))))
         """
         
-        #Solution qui fonctionne mais avec des problemes d optimisation
         intersection = [self.positionVoiture.center]*5
         distanceCapteur = [0]*5 #renvoie la distance entre le centre de la voiture et le circuit pour chaque capteur
 
@@ -265,6 +263,7 @@ class Affichage():
         if self.sommeRGB(self.window.get_at(self.positionVoiture.center)) > 496 and self.score > 1000:
             print("Circuit termine")
             self.tourComplet = True
+            #self.score = self.score+(500000//(self.score**0.1)) #Plus d'influence de la trajectoire pour les petits circuit car pour les grands le score est de lui meme plus espace
             self.run = False
             
         

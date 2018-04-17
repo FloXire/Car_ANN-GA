@@ -8,8 +8,11 @@ import numpy as np
 from matplotlib import ticker
 import matplotlib.pyplot as plt
 import time
+import os
+import json
 
 from Commun.constantes import Constante
+
 
 def afficherResultats(compteurGenerations, tabResults):
     
@@ -63,15 +66,15 @@ def enregistrerResultats(compteurGenerations, tabResults):
     #coeffs3Meilleurs = self.coeffsMoindresCarres(tabMoyenne3meilleurs)
     #coeffsMeilleurs = self.coeffsMoindresCarres(tabMeilleurs)
 
-    coeffs3Meilleurs = np.polyfit(x, tabMoyenne3meilleurs, Constante.DEGRE_POLYNOME_APPROXIMATION)
-    coeffsMeilleurs = np.polyfit(x, tabMeilleurs, Constante.DEGRE_POLYNOME_APPROXIMATION)
+    #coeffs3Meilleurs = np.polyfit(x, tabMoyenne3meilleurs, Constante.DEGRE_POLYNOME_APPROXIMATION)
+    #coeffsMeilleurs = np.polyfit(x, tabMeilleurs, Constante.DEGRE_POLYNOME_APPROXIMATION)
     
-    
-    tabY3Meilleurs = yMoindresCarres(xLeastSquare, coeffs3Meilleurs)
-    tabYMeilleurs = yMoindresCarres(xLeastSquare, coeffsMeilleurs)
+    #tabY3Meilleurs = yMoindresCarres(xLeastSquare, coeffs3Meilleurs)
+    #tabYMeilleurs = yMoindresCarres(xLeastSquare, coeffsMeilleurs)
      
+    os.makedirs('graphes/fig_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}'.format(date, Constante.NOMBRE_INDIVIDUS, Constante.CHANCE_MUTATION, Constante.NOMBRE_NEURONES_HIDDEN))
     
-    for k in range(4):
+    for k in range(2):
         plt.close()
         
         fig = plt.figure()
@@ -82,26 +85,33 @@ def enregistrerResultats(compteurGenerations, tabResults):
             plt.title("Score moyen des 3 meilleurs individus de chaque generation")
             ax = ax.set(xlabel="Numero de la generation", ylabel="Score moyen")
             plt.plot(x, tabMoyenne3meilleurs, 'x')
-            plt.savefig('graphes/fig3Meilleurs_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}.png'.format(date, Constante.NOMBRE_INDIVIDUS, Constante.CHANCE_MUTATION, Constante.NOMBRE_NEURONES_HIDDEN))
+            plt.savefig('graphes/fig_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}/fig3Meilleurs_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}.png'.format(date, Constante.NOMBRE_INDIVIDUS, Constante.CHANCE_MUTATION, Constante.NOMBRE_NEURONES_HIDDEN))
         
         elif k == 1:
             plt.title("Score du meilleur individu de chaque generation")
             ax = ax.set(xlabel="Numero de la generation", ylabel="Score")
             plt.plot(x, tabMeilleurs, 'rx')
-            plt.savefig('graphes/figMeilleurs_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}.png'.format(date, Constante.NOMBRE_INDIVIDUS, Constante.CHANCE_MUTATION, Constante.NOMBRE_NEURONES_HIDDEN))
+            plt.savefig('graphes/fig_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}/figMeilleurs_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}.png'.format(date, Constante.NOMBRE_INDIVIDUS, Constante.CHANCE_MUTATION, Constante.NOMBRE_NEURONES_HIDDEN))
         
-        elif k == 2:
+        #moindres carres, peu pertinent
+        """"elif k == 2:
             plt.title("Score moyen des 3 meilleurs individus en fonction de la generation, \n approximation par un polynome de degre {}".format(Constante.DEGRE_POLYNOME_APPROXIMATION))
             ax = ax.set(xlabel="Numero de la generation", ylabel="Approximation score moyen")
             plt.plot(xLeastSquare, tabY3Meilleurs)
-            plt.savefig('graphes/figApproximation3Meilleurs_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}.png'.format(date, Constante.NOMBRE_INDIVIDUS, Constante.CHANCE_MUTATION, Constante.NOMBRE_NEURONES_HIDDEN))
+            plt.savefig('graphes/fig_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}/figApproximation3Meilleurs_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}.png'.format(date, Constante.NOMBRE_INDIVIDUS, Constante.CHANCE_MUTATION, Constante.NOMBRE_NEURONES_HIDDEN))
         
         elif k == 3:
             plt.title("Score du meilleur individu en fonction de la generation, \n approximation par un polynome de degre {}".format(Constante.DEGRE_POLYNOME_APPROXIMATION))
             ax = ax.set(xlabel="Numero de la generation", ylabel="Approximation score")
             plt.plot(xLeastSquare, tabYMeilleurs, 'r')
-            plt.savefig('graphes/figApproximationMeilleurs_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}.png'.format(date, Constante.NOMBRE_INDIVIDUS, Constante.CHANCE_MUTATION, Constante.NOMBRE_NEURONES_HIDDEN))
-        
+            plt.savefig('graphes/fig_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}/figApproximationMeilleurs_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}.png'.format(date, Constante.NOMBRE_INDIVIDUS, Constante.CHANCE_MUTATION, Constante.NOMBRE_NEURONES_HIDDEN))
+        """
+    
+    fileTabs = open('graphes/fig_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}/tabMeilleurs_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}.txt'.format(date, Constante.NOMBRE_INDIVIDUS, Constante.CHANCE_MUTATION, Constante.NOMBRE_NEURONES_HIDDEN), "w")
+    dataFileTabs = [tabMeilleurs, tabMoyenne3meilleurs]
+    
+    json.dump(dataFileTabs, fileTabs)    
+    
 
 def J(points):
     

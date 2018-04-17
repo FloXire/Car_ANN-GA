@@ -14,7 +14,7 @@ def creationDossierGraphes():
     
     if not(os.path.exists('graphes')):
         os.makedirs('graphes')
-
+        
 
 if __name__ == '__main__':
     creationDossierGraphes()
