@@ -70,8 +70,8 @@ def enregistrerResultats(compteurGenerations, tabResults):
     
     date = time.time()
     
-    x = np.arange(1, Constante.NOMBRE_GENERATIONS_MAX)
-    xLeastSquare = np.arange(1, Constante.NOMBRE_GENERATIONS_MAX-0.99, 0.01)
+    x = np.arange(1, Constante.NOMBRE_GENERATIONS_MAX+1)
+    xLeastSquare = np.arange(1, Constante.NOMBRE_GENERATIONS_MAX+0.01, 0.01)
     
     #coeffs3Meilleurs = self.coeffsMoindresCarres(tabMoyenne3meilleurs)
     #coeffsMeilleurs = self.coeffsMoindresCarres(tabMeilleurs)
@@ -125,7 +125,7 @@ def enregistrerResultats(compteurGenerations, tabResults):
 
 def J(points):
     
-    x = np.arange(1, Constante.NOMBRE_GENERATIONS_MAX)
+    x = np.arange(1, Constante.NOMBRE_GENERATIONS_MAX+1)
     J = np.eye(len(points), Constante.DEGRE_POLYNOME_APPROXIMATION + 1)
 
     for i in range(len(points)):

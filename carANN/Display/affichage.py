@@ -3,6 +3,7 @@ Created on 23 fevr. 2018
 
 @author: flo-1
 '''
+from Commun import constantes
 
 '''
 Created on 17 janv. 2018
@@ -30,6 +31,8 @@ from Display.traitementResultats import afficherResultats, enregistrerResultats
 tabScoresEtParams = []
 compteurIndividus = 1
 compteurGenerations = 1
+circuitTermine = False
+scorePremierArrive = 0
 name = "TIPE : generation " + str(compteurGenerations) + ", individu " + str(compteurIndividus)
 paramA0 = [np.zeros((Constante.NOMBRE_NEURONES_IN, Constante.NOMBRE_NEURONES_HIDDEN)), np.zeros((Constante.NOMBRE_NEURONES_HIDDEN)), np.zeros((Constante.NOMBRE_NEURONES_HIDDEN, Constante.NOMBRE_NEURONES_OUT)), np.zeros((Constante.NOMBRE_NEURONES_OUT))]
 #paramA0 represente les parametres d'un reseau de neurone initialises a 0
@@ -66,7 +69,7 @@ class Affichage():
         pygame.display.set_caption(name)
         pygame.display.flip()
         
-        self.numeroCircuit = 0 #permet de pouvoir changer de circuit a tout moment, par exemple quand un individu a termine un circuit, on peut le faire rouler sur un autre
+        self.numeroCircuit = Constante.NUMERO_CIRCUIT #permet de pouvoir changer de circuit a tout moment, par exemple quand un individu a termine un circuit, on peut le faire rouler sur un autre
         self.initCircuit()
         
         self.positionVoiture = self.voiture.get_rect()
@@ -81,7 +84,7 @@ class Affichage():
         self.oldPosX = self.initCarPosition[0]
         self.oldPosY = self.initCarPosition[1]
         
-        self.vitesse = 1
+        self.vitesse = Constante.VITESSE
         
         self.score = 0
         
@@ -146,10 +149,12 @@ class Affichage():
                 listeCroisee = algorithme_genetique.croisements(listeTriee)
                 self.tabParamsAllIndiv = algorithme_genetique.mutations(listeCroisee)
                 """doit on faire la selection sur tous les indivs de toutes les generations? (la on l'a fait pas)"""
-                #tabScoresEtParams = []
+                
+                if Constante.METHODE_SELECTION == 'E':
+                    tabScoresEtParams = []
 
                 
-            if compteurGenerations == Constante.NOMBRE_GENERATIONS_MAX: #On arrete le programme quand on a genere 50 generations
+            if compteurGenerations == Constante.NOMBRE_GENERATIONS_MAX+1: #On arrete le programme quand on a genere 50 generations
                 enregistrerResultats(compteurGenerations, tabResults)
                 sys.exit()
             
@@ -205,6 +210,9 @@ class Affichage():
             
             
     def getValeursCapteurs(self):
+        
+        global circuitTermine
+        global constanteBonusScore
         
         #44, 42 et 32 correspondent a des constantes pour la position des capteurs sur la voiture
         """RAVD = (int(self.positionVoiture.center[0] + 44*math.cos(math.radians(self.angle)) + 32*math.sin(math.radians(self.angle))), int(self.positionVoiture.center[1] + 32*math.cos(math.radians(self.angle)) - 44*math.sin(math.radians(self.angle))))
@@ -268,7 +276,15 @@ class Affichage():
         if self.sommeRGB(self.window.get_at(self.positionVoiture.center)) > 496 and self.score > 1000:
             print("Circuit termine")
             self.tourComplet = True
-            #self.score = self.score+(500000//(self.score**0.1)) #Plus d'influence de la trajectoire pour les petits circuit car pour les grands le score est de lui meme plus espace
+            
+            if not(circuitTermine):
+                scorePremierArrive = self.score
+                
+            diff = scorePremierArrive - self.score
+            self.score += 2*diff #Plus d'influence de la trajectoire pour les petits circuit car pour les grands le score est de lui meme plus espace
+            self.score += (10*self.score)/100 #Ajout d'un bonus pour tous les indivs ayant fini le circuit (pour eviter le cas ou des indivs n'ayant pas termine le circuit de peu passent devant des indivs ayant fini le circuit)
+            circuitTermine = False
+            
             self.run = False
             
         

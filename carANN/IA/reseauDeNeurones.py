@@ -1,3 +1,5 @@
+"""module qui sert pour des tests"""
+
 import numpy as np
 import theano
 import theano.tensor as T
@@ -7,18 +9,29 @@ from Commun.constantes import Constante
 
 inputNet = np.array([[-60,-60,-60,-60,-60]])
 
+"""
 #print(4000+(500//(4000**0.1)))
 #print(4000+(50//((4000**2)**0.01))-(3990+(50//((3990**2)**0.01))))
 
-#print(4000+(500000/4000))
-#print(3990+(500000/3990))
+
+score1 = 3500
+score2 = 3000
+
+csteBonus = score1*1.5
+
+print(score1+(csteBonus**15/score1**15)*(csteBonus/(1.5*4500)))
+print(score2+(csteBonus**15/score2**15)*(csteBonus/(1.5*4500)))
+
+print(score1+(10*score1)/100-((10**2)*score1))
+print(score2+(10*score2)/100)
+
+#self.score = self.score+(10*self.score)/100+(constanteBonusScore/self.score)**15
 
 #print(2200+(7000**9/(2200**9)))
 #print(2190+(7000**9/(2190**9)))
 
-print(4400+1/(16*math.log(3300/4400)))
-print(4390+1/(16*math.log(3290/4390)))
-
+#(500000//(self.score**0.1))
+"""
 
 def aNN():
 
