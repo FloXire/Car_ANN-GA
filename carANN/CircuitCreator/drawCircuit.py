@@ -176,7 +176,7 @@ class DrawCircuit(object):
             
             file = open("circuits.txt", "w")
             
-            donneesCircuit = {"Circuit" : self.circuit, "PositionVoiture" : (self.positionVoiture[0], self.positionVoiture[1]), "AngleVoiture" : self.angleVoiture, "LigneDepart" : self.ligneDepart}
+            donneesCircuit = {"Circuit" : self.circuit, "PositionVoiture" : (self.positionVoiture.center[0] - 75, self.positionVoiture.center[1] - 37), "AngleVoiture" : self.angleVoiture, "LigneDepart" : self.ligneDepart}
             
             donneesFichier.append(donneesCircuit)
         

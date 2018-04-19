@@ -17,22 +17,17 @@ from audioop import reverse
 
 def afficherResultats(compteurGenerations, tabResults):
     
-    tabMoyenne = []
+    tabMax = []
     for i in range(compteurGenerations-1) :
-        moyenne = 0
-        
-        for j in range(Constante.NOMBRE_INDIVIDUS-1):
-            moyenne += tabResults[i][j][0]
-        
-        moyenne /= Constante.NOMBRE_INDIVIDUS
-        tabMoyenne.append(moyenne)
-    
+
+        tabMax.append(max([tabResults[i][j][0] for j in range(Constante.NOMBRE_INDIVIDUS-1)]))
+
     plt.close()
     fig = plt.figure()
     ax = plt.axes()
-    plt.title("Score moyen en fonction de la generation")
+    plt.title("Score du meilleur individu en fonction de la generation")
     ax = ax.set(xlabel="Numero de la generation", ylabel="Score moyen")
-    plt.plot(np.arange(1, len(tabResults)), tabMoyenne, 'x')
+    plt.plot(np.arange(1, len(tabResults)), tabMax, 'x')
     plt.show()
     
 def takeFirst(tabResults):
