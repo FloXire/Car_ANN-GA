@@ -212,7 +212,7 @@ class Affichage():
     def getValeursCapteurs(self):
         
         global circuitTermine
-        global constanteBonusScore
+        global scorePremierArrive
         
         #44, 42 et 32 correspondent a des constantes pour la position des capteurs sur la voiture
         """RAVD = (int(self.positionVoiture.center[0] + 44*math.cos(math.radians(self.angle)) + 32*math.sin(math.radians(self.angle))), int(self.positionVoiture.center[1] + 32*math.cos(math.radians(self.angle)) - 44*math.sin(math.radians(self.angle))))
@@ -279,11 +279,11 @@ class Affichage():
             
             if not(circuitTermine):
                 scorePremierArrive = self.score
+                circuitTermine = True
                 
             diff = scorePremierArrive - self.score
             self.score += 2*diff #Plus d'influence de la trajectoire pour les petits circuit car pour les grands le score est de lui meme plus espace
-            self.score += (10*self.score)/100 #Ajout d'un bonus pour tous les indivs ayant fini le circuit (pour eviter le cas ou des indivs n'ayant pas termine le circuit de peu passent devant des indivs ayant fini le circuit)
-            circuitTermine = False
+            self.score += (10*self.score)/100 #Ajout d'un bonus de score de 10 pourcent pour tous les indivs ayant fini le circuit (pour eviter le cas ou des indivs n'ayant pas termine le circuit de peu passent devant des indivs ayant fini le circuit)
             
             self.run = False
             
