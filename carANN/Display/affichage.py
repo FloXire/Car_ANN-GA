@@ -38,6 +38,7 @@ tabResults = []
 tabResults.append([0]*Constante.NOMBRE_INDIVIDUS)
 
 #theano.config.compute_test_value = 'warn'
+#print(sys.getrecursionlimit())
 sys.setrecursionlimit(10000)
 
 class Affichage():
@@ -47,7 +48,7 @@ class Affichage():
         global name
         global compteurIndividus
         global compteurGenerations
-
+        
         name = "TIPE : generation " + str(compteurGenerations) + ", individu " + str(compteurIndividus)
 
         #on initialise pygame
@@ -133,7 +134,7 @@ class Affichage():
 
             tabScoresEtParams.append((self.score, self.paramsReseau))
             
-            tabResults[compteurGenerations-1][compteurIndividus-1] = [self.score, self.tourComplet]
+            tabResults[compteurGenerations-1][compteurIndividus-1] = [self.score, self.paramsReseau, self.tourComplet]
             
             if compteurIndividus % Constante.NOMBRE_INDIVIDUS == 0:
                 compteurGenerations += 1
@@ -144,12 +145,16 @@ class Affichage():
                 listeTriee = algorithme_genetique.triIndividus(tabScoresEtParams)
                 listeCroisee = algorithme_genetique.croisements(listeTriee)
                 self.tabParamsAllIndiv = algorithme_genetique.mutations(listeCroisee)
-                        
+                """doit on faire la selection sur tous les indivs de toutes les generations? (la on l'a fait pas)"""
+                #tabScoresEtParams = []
+
+                
             if compteurGenerations == Constante.NOMBRE_GENERATIONS_MAX: #On arrete le programme quand on a genere 50 generations
                 enregistrerResultats(compteurGenerations, tabResults)
                 sys.exit()
             
             compteurIndividus += 1
+            
             Affichage(self.tabParamsAllIndiv)
     
     

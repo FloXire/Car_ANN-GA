@@ -12,6 +12,7 @@ import os
 import json
 
 from Commun.constantes import Constante
+from audioop import reverse
 
 
 def afficherResultats(compteurGenerations, tabResults):
@@ -45,6 +46,7 @@ def enregistrerResultats(compteurGenerations, tabResults):
     
     tabMoyenne3meilleurs = []
     tabMeilleurs = []
+    tabMeilleursEtParams = []    
     
     for i in range(compteurGenerations-1) :
         moyenne = 0
@@ -54,14 +56,22 @@ def enregistrerResultats(compteurGenerations, tabResults):
             
             if j == 0:
                 tabMeilleurs.append(tabResultsOrdonne[i][j][0])
-        
+                tabMeilleursEtParams.append((tabResultsOrdonne[i][j][0], tabResultsOrdonne[i][j][1]))
+                
         moyenne /= Constante.NOMBRE_INDIVIDUS_GRAPHE
         tabMoyenne3meilleurs.append(moyenne)
+    
+    tabMeilleursRanges = sorted(tabMeilleursEtParams, key = takeFirst, reverse = True)
+    meilleursParams = tabMeilleursRanges[0][1]
+    meilleursParamsSansNp = []
+    
+    for param in meilleursParams:
+        meilleursParamsSansNp.append(param.tolist())
     
     date = time.time()
     
     x = np.arange(1, Constante.NOMBRE_GENERATIONS_MAX)
-    xLeastSquare = np.arange(1, Constante.NOMBRE_GENERATIONS_MAX-1, 0.01)
+    xLeastSquare = np.arange(1, Constante.NOMBRE_GENERATIONS_MAX-0.99, 0.01)
     
     #coeffs3Meilleurs = self.coeffsMoindresCarres(tabMoyenne3meilleurs)
     #coeffsMeilleurs = self.coeffsMoindresCarres(tabMeilleurs)
@@ -108,7 +118,7 @@ def enregistrerResultats(compteurGenerations, tabResults):
         """
     
     fileTabs = open('graphes/fig_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}/tabMeilleurs_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}.txt'.format(date, Constante.NOMBRE_INDIVIDUS, Constante.CHANCE_MUTATION, Constante.NOMBRE_NEURONES_HIDDEN), "w")
-    dataFileTabs = [tabMeilleurs, tabMoyenne3meilleurs]
+    dataFileTabs = [tabMeilleurs, tabMoyenne3meilleurs, meilleursParamsSansNp] #pb de compatibilite json et np, il faudra reformer les params sous forme de tableau np
     
     json.dump(dataFileTabs, fileTabs)    
     
