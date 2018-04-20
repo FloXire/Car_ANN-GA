@@ -20,9 +20,6 @@ import theano.tensor as T
 import lasagne
 import json
 import sys
-from matplotlib import ticker
-#import matplotlib.pyplot as plt
-#import time
 
 from Commun.constantes import Constante
 from AlgoGen import algorithme_genetique
@@ -148,8 +145,8 @@ class Affichage():
                 listeTriee = algorithme_genetique.triIndividus(tabScoresEtParams)
                 listeCroisee = algorithme_genetique.croisements(listeTriee)
                 self.tabParamsAllIndiv = algorithme_genetique.mutations(listeCroisee)
-                """doit on faire la selection sur tous les indivs de toutes les generations? (la on l'a fait pas)"""
                 
+                """doit on faire la selection sur tous les indivs de toutes les generations? oui : 'TE', non : 'E' (a changer dans les constantes"""
                 if Constante.METHODE_SELECTION == 'E':
                     tabScoresEtParams = []
 
@@ -282,7 +279,7 @@ class Affichage():
                 circuitTermine = True
                 
             diff = scorePremierArrive - self.score
-            self.score += 2*diff #Plus d'influence de la trajectoire pour les petits circuit car pour les grands le score est de lui meme plus espace
+            self.score += 4*diff #Plus d'influence de la trajectoire pour les petits circuit car pour les grands le score est de lui meme plus espace
             self.score += (10*self.score)/100 #Ajout d'un bonus de score de 10 pourcent pour tous les indivs ayant fini le circuit (pour eviter le cas ou des indivs n'ayant pas termine le circuit de peu passent devant des indivs ayant fini le circuit)
             
             self.run = False

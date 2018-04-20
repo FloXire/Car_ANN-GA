@@ -12,14 +12,12 @@ import os
 import json
 
 from Commun.constantes import Constante
-from audioop import reverse
 
 
 def afficherResultats(compteurGenerations, tabResults):
     
     tabMax = []
     for i in range(compteurGenerations-1) :
-
         tabMax.append(max([tabResults[i][j][0] for j in range(Constante.NOMBRE_INDIVIDUS-1)]))
 
     plt.close()
@@ -90,13 +88,13 @@ def enregistrerResultats(compteurGenerations, tabResults):
             plt.title("Score moyen des 3 meilleurs individus de chaque generation")
             ax = ax.set(xlabel="Numero de la generation", ylabel="Score moyen")
             plt.plot(x, tabMoyenne3meilleurs, 'x')
-            plt.savefig('graphes/fig_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}/fig3Meilleurs_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}.png'.format(date, Constante.NOMBRE_INDIVIDUS, Constante.CHANCE_MUTATION, Constante.NOMBRE_NEURONES_HIDDEN))
+            plt.savefig('graphes/fig_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}/fig3Meilleurs_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}_Selection{4}_Capteur{5}.png'.format(date, Constante.NOMBRE_INDIVIDUS, Constante.CHANCE_MUTATION, Constante.NOMBRE_NEURONES_HIDDEN, Constante.METHODE_SELECTION, Constante.DISTANCE_MAX_CAPTEURS))
         
         elif k == 1:
             plt.title("Score du meilleur individu de chaque generation")
             ax = ax.set(xlabel="Numero de la generation", ylabel="Score")
             plt.plot(x, tabMeilleurs, 'rx')
-            plt.savefig('graphes/fig_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}/figMeilleurs_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}.png'.format(date, Constante.NOMBRE_INDIVIDUS, Constante.CHANCE_MUTATION, Constante.NOMBRE_NEURONES_HIDDEN))
+            plt.savefig('graphes/fig_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}/figMeilleurs_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}_Selection{4}_Capteur{5}.png'.format(date, Constante.NOMBRE_INDIVIDUS, Constante.CHANCE_MUTATION, Constante.NOMBRE_NEURONES_HIDDEN, Constante.METHODE_SELECTION, Constante.DISTANCE_MAX_CAPTEURS))
         
         #moindres carres, peu pertinent
         """"elif k == 2:
