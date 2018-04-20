@@ -19,12 +19,12 @@ class Constante():
     NOMBRE_INDIVIDUS_GRAPHE = 3
     
     DEGRE_POLYNOME_APPROXIMATION = 3
-    NOMBRE_GENERATIONS_MAX = 3
+    NOMBRE_GENERATIONS_MAX = 35
     
     NOMBRE_NEURONES_IN = 5
     NOMBRE_NEURONES_HIDDEN = 7
     NOMBRE_NEURONES_OUT = 1
     
-    CHANCE_MUTATION = 0.30
+    CHANCE_MUTATION = 0.001
     
-    METHODE_SELECTION = 'TE' #TE = tres ellitiste, E = ellitiste
+    METHODE_SELECTION = 'E' #TE = tres ellitiste, E = ellitiste
