@@ -324,7 +324,7 @@ class Affichage():
         x = T.matrix('x')
         
         l_in = lasagne.layers.InputLayer((1, Constante.NOMBRE_NEURONES_IN), name="input_layer", input_var=x)
-        l_hidden = lasagne.layers.DenseLayer(l_in, Constante.NOMBRE_NEURONES_HIDDEN, name="hidden_layer", nonlinearity=lasagne.nonlinearities.rectify, W=W_init)
+        l_hidden = lasagne.layers.DenseLayer(l_in, Constante.NOMBRE_NEURONES_HIDDEN, name="hidden_layer", nonlinearity=lasagne.nonlinearities.ScaledTanh(scale_in = math.pi, scale_out = math.pi), W=W_init)
         l_out = lasagne.layers.DenseLayer(l_hidden, Constante.NOMBRE_NEURONES_OUT, name="output_layer", nonlinearity=lasagne.nonlinearities.ScaledTanh(scale_in = math.pi, scale_out = math.pi), W=W_output)
         y = lasagne.layers.get_output(l_out)
         

@@ -37,22 +37,36 @@ def enregistrerResultats(compteurGenerations, tabResults):
     for i in range(compteurGenerations-1):
         tabResultsOrdonne.append(sorted(tabResults[i], key = takeFirst, reverse = True))
     
+    tabMoyenneAll = []
     tabMoyenne3meilleurs = []
     tabMeilleurs = []
+    tabMeilleursCircuitFini = []
+    tabMeilleursCircuitNonFini = []
     tabMeilleursEtParams = []    
     
     for i in range(compteurGenerations-1) :
-        moyenne = 0
-        
+        moyenne3 = 0
+        moyenneAll = 0
         for j in range(Constante.NOMBRE_INDIVIDUS_GRAPHE):
-            moyenne += tabResultsOrdonne[i][j][0]
+            moyenneAll += tabResultsOrdonne[i][j][0]
+            
+            if j < (Constante.NOMBRE_INDIVIDUS_GRAPHE):
+                moyenne3 += tabResultsOrdonne[i][j][0]
             
             if j == 0:
                 tabMeilleurs.append(tabResultsOrdonne[i][j][0])
                 tabMeilleursEtParams.append((tabResultsOrdonne[i][j][0], tabResultsOrdonne[i][j][1]))
                 
-        moyenne /= Constante.NOMBRE_INDIVIDUS_GRAPHE
-        tabMoyenne3meilleurs.append(moyenne)
+                if tabResultsOrdonne[i][j][2]:
+                    tabMeilleursCircuitFini.append((i+1, tabResultsOrdonne[i][j][0]))
+                else:
+                    tabMeilleursCircuitNonFini.append((i+1, tabResultsOrdonne[i][j][0]))
+                
+                
+        moyenne3 /= Constante.NOMBRE_INDIVIDUS_GRAPHE
+        moyenneAll /= Constante.NOMBRE_INDIVIDUS
+        tabMoyenne3meilleurs.append(moyenne3)
+        tabMoyenneAll.append(moyenneAll)
     
     tabMeilleursRanges = sorted(tabMeilleursEtParams, key = takeFirst, reverse = True)
     meilleursParams = tabMeilleursRanges[0][1]
@@ -66,6 +80,12 @@ def enregistrerResultats(compteurGenerations, tabResults):
     x = np.arange(1, Constante.NOMBRE_GENERATIONS_MAX+1)
     xLeastSquare = np.arange(1, Constante.NOMBRE_GENERATIONS_MAX+0.01, 0.01)
     
+    xCircuitFini = [tabMeilleursCircuitFini[i][0] for i in range(len(tabMeilleursCircuitFini))]
+    yCircuitFini = [tabMeilleursCircuitFini[i][1] for i in range(len(tabMeilleursCircuitFini))]
+    
+    xCircuitNonFini = [tabMeilleursCircuitNonFini[i][0] for i in range(len(tabMeilleursCircuitNonFini))]
+    yCircuitNonFini = [tabMeilleursCircuitNonFini[i][1] for i in range(len(tabMeilleursCircuitNonFini))]
+    
     #coeffs3Meilleurs = self.coeffsMoindresCarres(tabMoyenne3meilleurs)
     #coeffsMeilleurs = self.coeffsMoindresCarres(tabMeilleurs)
 
@@ -75,9 +95,9 @@ def enregistrerResultats(compteurGenerations, tabResults):
     #tabY3Meilleurs = yMoindresCarres(xLeastSquare, coeffs3Meilleurs)
     #tabYMeilleurs = yMoindresCarres(xLeastSquare, coeffsMeilleurs)
      
-    os.makedirs('graphes/fig_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}'.format(date, Constante.NOMBRE_INDIVIDUS, Constante.CHANCE_MUTATION, Constante.NOMBRE_NEURONES_HIDDEN))
+    os.makedirs('graphes/fig_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}_Selection-{4}_Capteur-{5}'.format(date, Constante.NOMBRE_INDIVIDUS, Constante.CHANCE_MUTATION, Constante.NOMBRE_NEURONES_HIDDEN, Constante.METHODE_SELECTION, Constante.DISTANCE_MAX_CAPTEURS))
     
-    for k in range(2):
+    for k in range(3):
         plt.close()
         
         fig = plt.figure()
@@ -88,13 +108,21 @@ def enregistrerResultats(compteurGenerations, tabResults):
             plt.title("Score moyen des 3 meilleurs individus de chaque generation")
             ax = ax.set(xlabel="Numero de la generation", ylabel="Score moyen")
             plt.plot(x, tabMoyenne3meilleurs, 'x')
-            plt.savefig('graphes/fig_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}/fig3Meilleurs_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}_Selection{4}_Capteur{5}.png'.format(date, Constante.NOMBRE_INDIVIDUS, Constante.CHANCE_MUTATION, Constante.NOMBRE_NEURONES_HIDDEN, Constante.METHODE_SELECTION, Constante.DISTANCE_MAX_CAPTEURS))
+            plt.savefig('graphes/fig_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}_Selection-{4}_Capteur-{5}/fig3Meilleurs_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}_Selection{4}_Capteur{5}.png'.format(date, Constante.NOMBRE_INDIVIDUS, Constante.CHANCE_MUTATION, Constante.NOMBRE_NEURONES_HIDDEN, Constante.METHODE_SELECTION, Constante.DISTANCE_MAX_CAPTEURS))
         
         elif k == 1:
             plt.title("Score du meilleur individu de chaque generation")
             ax = ax.set(xlabel="Numero de la generation", ylabel="Score")
-            plt.plot(x, tabMeilleurs, 'rx')
-            plt.savefig('graphes/fig_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}/figMeilleurs_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}_Selection{4}_Capteur{5}.png'.format(date, Constante.NOMBRE_INDIVIDUS, Constante.CHANCE_MUTATION, Constante.NOMBRE_NEURONES_HIDDEN, Constante.METHODE_SELECTION, Constante.DISTANCE_MAX_CAPTEURS))
+            plt.plot(xCircuitFini, yCircuitFini, 'rx')
+            plt.plot(xCircuitNonFini, yCircuitNonFini, 'x')
+            plt.savefig('graphes/fig_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}_Selection-{4}_Capteur-{5}/figMeilleurs_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}_Selection-{4}_Capteur-{5}.png'.format(date, Constante.NOMBRE_INDIVIDUS, Constante.CHANCE_MUTATION, Constante.NOMBRE_NEURONES_HIDDEN, Constante.METHODE_SELECTION, Constante.DISTANCE_MAX_CAPTEURS))
+        
+        elif k == 2:
+            plt.title("Score moyen des individus de chaque generation")
+            ax = ax.set(xlabel="Numero de la generation", ylabel="Score moyen")
+            plt.plot(x, tabMoyenneAll, 'x')
+            plt.savefig('graphes/fig_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}_Selection-{4}_Capteur-{5}/figMoyenneAll_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}_Selection-{4}_Capteur-{5}.png'.format(date, Constante.NOMBRE_INDIVIDUS, Constante.CHANCE_MUTATION, Constante.NOMBRE_NEURONES_HIDDEN, Constante.METHODE_SELECTION, Constante.DISTANCE_MAX_CAPTEURS))
+        
         
         #moindres carres, peu pertinent
         """"elif k == 2:
@@ -110,7 +138,7 @@ def enregistrerResultats(compteurGenerations, tabResults):
             plt.savefig('graphes/fig_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}/figApproximationMeilleurs_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}.png'.format(date, Constante.NOMBRE_INDIVIDUS, Constante.CHANCE_MUTATION, Constante.NOMBRE_NEURONES_HIDDEN))
         """
     
-    fileTabs = open('graphes/fig_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}/tabMeilleurs_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}.txt'.format(date, Constante.NOMBRE_INDIVIDUS, Constante.CHANCE_MUTATION, Constante.NOMBRE_NEURONES_HIDDEN), "w")
+    fileTabs = open('graphes/fig_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}_Selection-{4}_Capteur-{5}/tabMeilleurs_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}_Selection-{4}_Capteur-{5}.txt'.format(date, Constante.NOMBRE_INDIVIDUS, Constante.CHANCE_MUTATION, Constante.NOMBRE_NEURONES_HIDDEN, Constante.METHODE_SELECTION, Constante.DISTANCE_MAX_CAPTEURS), "w")
     dataFileTabs = [tabMeilleurs, tabMoyenne3meilleurs, meilleursParamsSansNp] #pb de compatibilite json et np, il faudra reformer les params sous forme de tableau np
     
     json.dump(dataFileTabs, fileTabs)    

@@ -18,7 +18,6 @@ def croisements(tabParams):
         
     """selection elitiste, on prend les meilleurs individus (la moitie)"""
     """croisement des poids uniquement puisque les biais sont a 0"""
-    print(len(tabParams))
     tabParamsCroisement = tabParams[:Constante.NOMBRE_INDIVIDUS_CROISEMENT] #pas d'effets de bords
     tabParamsApresCroisement = tabParamsCroisement[:]
     tabPairesParents = []
