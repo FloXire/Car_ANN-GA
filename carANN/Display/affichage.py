@@ -23,7 +23,8 @@ import sys
 
 from Commun.constantes import Constante
 from AlgoGen import algorithme_genetique
-from Display.traitementResultats import afficherResultats, enregistrerResultats
+from Display.traitementResultats import afficherResultats, enregistrerResultats, takeFirst
+    
 
 tabScoresEtParams = []
 compteurIndividus = 1
@@ -93,8 +94,17 @@ class Affichage():
             self.tabParamsCurrentIndiv = self.tabParamsAllIndiv[compteurIndividus-1]
         
         self.f = self.BuildNeuralNetwork()
-                
+        
         self.run = True
+        
+        if compteurIndividus == 1 and compteurGenerations > 1:
+            tabResultsPrecGenDansLordre = sorted(tabResults[compteurGenerations-2], key = takeFirst, reverse = True)
+            self.score = tabResultsPrecGenDansLordre[0][0]
+            self.tourComplet = tabResultsPrecGenDansLordre[0][2]
+            if (self.tourComplet):
+                print(self.tourComplet)
+            self.run = False
+            
         self.update()
         
         
@@ -127,7 +137,7 @@ class Affichage():
             
             self.score += 1
             
-            pygame.display.flip() #On affiche tous les elements a l ecran 
+            #pygame.display.flip() #On affiche tous les elements a l ecran 
             
             
         if not(self.run):
@@ -139,7 +149,7 @@ class Affichage():
             if compteurIndividus % Constante.NOMBRE_INDIVIDUS == 0:
                 compteurGenerations += 1
                 compteurIndividus = 0
-            
+                                
                 tabResults.append([0]*Constante.NOMBRE_INDIVIDUS)
                 
                 listeTriee = algorithme_genetique.triIndividus(tabScoresEtParams)
@@ -158,7 +168,6 @@ class Affichage():
             compteurIndividus += 1
             
             Affichage(self.tabParamsAllIndiv)
-    
     
     def initCircuit(self):
         

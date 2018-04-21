@@ -50,14 +50,14 @@ def enregistrerResultats(compteurGenerations, tabResults):
         for j in range(Constante.NOMBRE_INDIVIDUS_GRAPHE):
             moyenneAll += tabResultsOrdonne[i][j][0]
             
-            if j < (Constante.NOMBRE_INDIVIDUS_GRAPHE):
+            if j < (Constante.NOMBRE_INDIVIDUS_GRAPHE): #si c'est un des 3 meilleurs indivs
                 moyenne3 += tabResultsOrdonne[i][j][0]
             
-            if j == 0:
+            if j == 0: #si c'est le meilleur indiv
                 tabMeilleurs.append(tabResultsOrdonne[i][j][0])
                 tabMeilleursEtParams.append((tabResultsOrdonne[i][j][0], tabResultsOrdonne[i][j][1]))
                 
-                if tabResultsOrdonne[i][j][2]:
+                if tabResultsOrdonne[i][j][2]: #si circuit fini
                     tabMeilleursCircuitFini.append((i+1, tabResultsOrdonne[i][j][0]))
                 else:
                     tabMeilleursCircuitNonFini.append((i+1, tabResultsOrdonne[i][j][0]))
