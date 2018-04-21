@@ -95,6 +95,8 @@ class Affichage():
         
         self.f = self.BuildNeuralNetwork()
         
+        self.coordTestBoucleInf = self.positionVoiture.center
+        
         self.run = True
         
         if compteurIndividus == 1 and compteurGenerations > 1:
@@ -126,7 +128,7 @@ class Affichage():
                         afficherResultats(compteurGenerations, tabResults)
                                 
             self.move()
-                        
+            
             self.window.fill(pygame.Color("black")) #remet tout en noir
             self.afficherCircuit()
             self.window.blit(self.voiture, self.positionVoiture)
@@ -136,6 +138,12 @@ class Affichage():
             self.rotation(self.angle + self.retourReseau(self.distances)[0][0])
             
             self.score += 1
+            
+            if self.score % 100 == 0:
+                if self.testBoucleInfinie(self.coordTestBoucleInf):
+                    self.run = False
+                else:
+                    self.coordTestBoucleInf = self.positionVoiture.center
             
             #pygame.display.flip() #On affiche tous les elements a l ecran 
             
@@ -315,8 +323,14 @@ class Affichage():
         
     def sommeRGB(self, tab):
         return (tab[0]+tab[1]+tab[2])
-            
-            
+    
+    def testBoucleInfinie(self, coordTest):
+        
+        if (abs(coordTest[0]-self.positionVoiture.center[0]) < 5 and (abs(coordTest[1]-self.positionVoiture.center[1])) < 5):
+            return True
+        else:
+            return False
+        
     def BuildNeuralNetwork(self):        
         
         global compteurGenerations
