@@ -146,6 +146,7 @@ class Affichage():
             
             if self.score % 100 == 0:
                 if self.testBoucleInfinie(self.coordTestBoucleInf):
+                    self.score -= 100 #malus
                     self.run = False
                 else:
                     self.coordTestBoucleInf = self.positionVoiture.center
