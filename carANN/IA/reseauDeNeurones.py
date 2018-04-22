@@ -9,6 +9,8 @@ from Commun.constantes import Constante
 
 inputNet = np.array([[-60,-60,-60,-60,-60]])
 
+#regler le pb du type qui va en arrière
+
 """
 #print(4000+(500//(4000**0.1)))
 #print(4000+(50//((4000**2)**0.01))-(3990+(50//((3990**2)**0.01))))

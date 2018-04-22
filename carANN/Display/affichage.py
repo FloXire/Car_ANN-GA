@@ -3,7 +3,6 @@ Created on 23 fevr. 2018
 
 @author: flo-1
 '''
-from Commun import constantes
 
 '''
 Created on 17 janv. 2018
@@ -44,7 +43,7 @@ sys.setrecursionlimit(10000)
 
 class Affichage():
     
-    def __init__(self, tabParamsANN = []):
+    def __init__(self, tabParamsANN = [], tabParamsATester = []):
 
         global name
         global compteurIndividus
@@ -92,8 +91,14 @@ class Affichage():
         
         if compteurGenerations > 1:
             self.tabParamsCurrentIndiv = self.tabParamsAllIndiv[compteurIndividus-1]
+            
+        if tabParamsATester != []:
+            self.tabParamsCurrentIndiv = tabParamsATester
+            self.paramsATester = True  
+        else:
+            self.paramsATester = False
         
-        self.f = self.BuildNeuralNetwork()
+        self.f = self.BuildNeuralNetwork(self.paramsATester)
         
         self.coordTestBoucleInf = self.positionVoiture.center
         
@@ -145,11 +150,14 @@ class Affichage():
                 else:
                     self.coordTestBoucleInf = self.positionVoiture.center
             
-            #pygame.display.flip() #On affiche tous les elements a l ecran 
+            pygame.display.flip() #On affiche tous les elements a l ecran 
             
             
         if not(self.run):
-
+            
+            if self.paramsATester == True:
+                sys.exit()
+            
             tabScoresEtParams.append((self.score, self.paramsReseau))
             
             tabResults[compteurGenerations-1][compteurIndividus-1] = [self.score, self.paramsReseau, self.tourComplet]
@@ -176,6 +184,7 @@ class Affichage():
             compteurIndividus += 1
             
             Affichage(self.tabParamsAllIndiv)
+    
     
     def initCircuit(self):
         
@@ -287,20 +296,27 @@ class Affichage():
                 self.run = False
                 
         #self.window.set_at((int(self.positionVoiture.center[0] + 75*math.cos(math.radians(self.angle)) + 0*math.sin(math.radians(self.angle))), int(self.positionVoiture.center[1] + 0*math.cos(math.radians(self.angle)) - 75*math.sin(math.radians(self.angle)))), pygame.Color("blue"))
-        if self.sommeRGB(self.window.get_at(self.positionVoiture.center)) > 496 and self.score > 1000:
-            print("Circuit termine")
-            self.tourComplet = True
+        if self.sommeRGB(self.window.get_at(self.positionVoiture.center)) > 496 and self.score > 100:
             
-            if not(circuitTermine):
-                scorePremierArrive = self.score
-                circuitTermine = True
+            if self.score < 2500:
+                print("Individu qui est retourne en arriere")
+                self.score /= 4
+                self.run = False
+            
+            else:
+                print("Circuit termine")
+                self.tourComplet = True
                 
-            diff = scorePremierArrive - self.score
-            self.score += 4*diff #Plus d'influence de la trajectoire pour les petits circuit car pour les grands le score est de lui meme plus espace
-            self.score += (10*self.score)/100 #Ajout d'un bonus de score de 10 pourcent pour tous les indivs ayant fini le circuit (pour eviter le cas ou des indivs n'ayant pas termine le circuit de peu passent devant des indivs ayant fini le circuit)
-            
-            self.run = False
-            
+                if not(circuitTermine):
+                    scorePremierArrive = self.score
+                    circuitTermine = True
+                    
+                diff = scorePremierArrive - self.score
+                self.score += 4*diff #Plus d'influence de la trajectoire pour les petits circuit car pour les grands le score est de lui meme plus espace
+                self.score += (10*self.score)/100 #Ajout d'un bonus de score de 10 pourcent pour tous les indivs ayant fini le circuit (pour eviter le cas ou des indivs n'ayant pas termine le circuit de peu passent devant des indivs ayant fini le circuit)
+                
+                self.run = False
+                
         
     #fonction permettant de faire tourner la voiture
     def rotation(self, angle):
@@ -320,9 +336,10 @@ class Affichage():
        
         return newPos
     
-        
+    
     def sommeRGB(self, tab):
         return (tab[0]+tab[1]+tab[2])
+    
     
     def testBoucleInfinie(self, coordTest):
         
@@ -331,7 +348,8 @@ class Affichage():
         else:
             return False
         
-    def BuildNeuralNetwork(self):        
+        
+    def BuildNeuralNetwork(self, paramsATester):        
         
         global compteurGenerations
         
@@ -349,13 +367,14 @@ class Affichage():
         l_in = lasagne.layers.InputLayer((1, Constante.NOMBRE_NEURONES_IN), name="input_layer", input_var=x)
         l_hidden = lasagne.layers.DenseLayer(l_in, Constante.NOMBRE_NEURONES_HIDDEN, name="hidden_layer", nonlinearity=lasagne.nonlinearities.ScaledTanh(scale_in = math.pi, scale_out = math.pi), W=W_init)
         l_out = lasagne.layers.DenseLayer(l_hidden, Constante.NOMBRE_NEURONES_OUT, name="output_layer", nonlinearity=lasagne.nonlinearities.ScaledTanh(scale_in = math.pi, scale_out = math.pi), W=W_output)
+        
+        if compteurGenerations > 1 or paramsATester:
+            lasagne.layers.set_all_param_values(l_out, self.tabParamsCurrentIndiv)
+        
         y = lasagne.layers.get_output(l_out)
         
         f = theano.function([x], y)
-        
-        if compteurGenerations > 1:
-            lasagne.layers.set_all_param_values(l_out, self.tabParamsCurrentIndiv)
-        
+                
         self.paramsReseau = lasagne.layers.get_all_param_values(l_out)
         
         return f
