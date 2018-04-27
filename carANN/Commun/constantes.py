@@ -28,3 +28,5 @@ class Constante():
     CHANCE_MUTATION = 0.30
     
     METHODE_SELECTION = 'E' #TE = tres ellitiste, E = ellitiste
+    
+    DETECTION_POIDS = 0

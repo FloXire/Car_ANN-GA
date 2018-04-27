@@ -23,7 +23,7 @@ import sys
 from Commun.constantes import Constante
 from AlgoGen import algorithme_genetique
 from Display.traitementResultats import afficherResultats, enregistrerResultats, takeFirst
-    
+from Display.drawANN import schemaANN
 
 tabScoresEtParams = []
 compteurIndividus = 1
@@ -131,6 +131,8 @@ class Affichage():
                 if event.type == KEYDOWN:
                     if event.key == K_r:
                         afficherResultats(compteurGenerations, tabResults)
+                    if event.key == K_e:
+                        schemaANN(Constante.NOMBRE_NEURONES_IN, Constante.NOMBRE_NEURONES_HIDDEN, self.paramsReseau)
                                 
             self.move()
             

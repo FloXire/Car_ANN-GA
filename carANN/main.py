@@ -47,4 +47,5 @@ def creationDossierGraphes():
 if __name__ == '__main__':
     creationDossierGraphes()
     #launchANN("graphes/Mutations_15/fig_Date-1524358182.468281_Indiv-10_Mut-0.15_NeurHidden-7_Selection-E_Capteur-60/tabMeilleurs_Date-1524358182.468281_Indiv-10_Mut-0.15_NeurHidden-7_Selection-E_Capteur-60.txt")
+    #launchANN("graphes/Mutations_5/fig_Date-1524378627.1302252_Indiv-10_Mut-0.05_NeurHidden-7_Selection-E_Capteur-60/tabMeilleurs_Date-1524378627.1302252_Indiv-10_Mut-0.05_NeurHidden-7_Selection-E_Capteur-60.txt")
     launchRandomANN()

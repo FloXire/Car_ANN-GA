@@ -12,7 +12,7 @@ import os
 import json
 
 from Commun.constantes import Constante
-
+from Display.drawANN import schemaANN
 
 def afficherResultats(compteurGenerations, tabResults):
     
@@ -137,6 +137,9 @@ def enregistrerResultats(compteurGenerations, tabResults):
             plt.plot(xLeastSquare, tabYMeilleurs, 'r')
             plt.savefig('graphes/fig_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}/figApproximationMeilleurs_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}.png'.format(date, Constante.NOMBRE_INDIVIDUS, Constante.CHANCE_MUTATION, Constante.NOMBRE_NEURONES_HIDDEN))
         """
+        
+    arboFic = 'graphes/fig_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}_Selection-{4}_Capteur-{5}/schemaMeilleurReseau_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}_Selection-{4}_Capteur-{5}.png'.format(date, Constante.NOMBRE_INDIVIDUS, Constante.CHANCE_MUTATION, Constante.NOMBRE_NEURONES_HIDDEN, Constante.METHODE_SELECTION, Constante.DISTANCE_MAX_CAPTEURS)
+    schemaANN(Constante.NOMBRE_NEURONES_IN, Constante.NOMBRE_NEURONES_HIDDEN, meilleursParamsSansNp, save = True, emplacement = arboFic)
     
     fileTabs = open('graphes/fig_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}_Selection-{4}_Capteur-{5}/tabMeilleurs_Date-{0}_Indiv-{1}_Mut-{2}_NeurHidden-{3}_Selection-{4}_Capteur-{5}.txt'.format(date, Constante.NOMBRE_INDIVIDUS, Constante.CHANCE_MUTATION, Constante.NOMBRE_NEURONES_HIDDEN, Constante.METHODE_SELECTION, Constante.DISTANCE_MAX_CAPTEURS), "w")
     dataFileTabs = [tabMeilleurs, tabMoyenne3meilleurs, meilleursParamsSansNp] #pb de compatibilite json et np, il faudra reformer les params sous forme de tableau np
