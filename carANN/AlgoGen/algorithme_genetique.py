@@ -77,8 +77,8 @@ def croisements(tabParams):
     return tabParamsApresCroisement
 
 
-def mutations(listeCroisee):
-    
+def mutations(listeCroisee, tauxMutations):
+            
     tabAvecMutations = listeCroisee[:] #limitation des effets de bords
         
     for i in range(1, len(listeCroisee)): #on ne veut pas de mutations pour le meilleur individu qui reste identique a la generation suivante
@@ -87,14 +87,14 @@ def mutations(listeCroisee):
             if j == 0:
                 for k in range(Constante.NOMBRE_NEURONES_IN):
                     for l in range(Constante.NOMBRE_NEURONES_HIDDEN):
-                        if np.random.random() < Constante.CHANCE_MUTATION:
+                        if np.random.random() < tauxMutations:
                             tabAvecMutations[i][j][k][l] = np.random.normal(0, 0.1)
                             #print("une mutation a eu lieu en : " + str(i) + ", " + str(j) + ", " + str(k) + ", " + str(l))
             
             elif j == 2:
                 for k in range(Constante.NOMBRE_NEURONES_HIDDEN):
                     for l in range(Constante.NOMBRE_NEURONES_OUT):
-                        if np.random.random() < Constante.CHANCE_MUTATION:
+                        if np.random.random() < tauxMutations:
                             tabAvecMutations[i][j][k][l] = np.random.normal(0, 0.1)
                             #print("Une mutation a eu lieu en : " + str(i) + ", " + str(j) + ", " + str(k) + ", " + str(l))
                             

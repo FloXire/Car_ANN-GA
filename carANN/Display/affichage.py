@@ -25,14 +25,20 @@ from AlgoGen import algorithme_genetique
 from Display.traitementResultats import afficherResultats, enregistrerResultats, takeFirst
 from Display.drawANN import schemaANN
 
+tauxMutations = Constante.CHANCE_MUTATION
+
 tabScoresEtParams = []
-compteurIndividus = 1
-compteurGenerations = 1
-circuitTermine = False
-scorePremierArrive = 0
-name = "TIPE : generation " + str(compteurGenerations) + ", individu " + str(compteurIndividus)
 paramA0 = [np.zeros((Constante.NOMBRE_NEURONES_IN, Constante.NOMBRE_NEURONES_HIDDEN)), np.zeros((Constante.NOMBRE_NEURONES_HIDDEN)), np.zeros((Constante.NOMBRE_NEURONES_HIDDEN, Constante.NOMBRE_NEURONES_OUT)), np.zeros((Constante.NOMBRE_NEURONES_OUT))]
 #paramA0 represente les parametres d'un reseau de neurone initialises a 0
+
+compteurIndividus = 1
+compteurGenerations = 1
+
+circuitTermine = False
+scorePremierArrive = 0
+
+name = "TIPE : generation " + str(compteurGenerations) + ", individu " + str(compteurIndividus)
+
 
 tabResults = []
 tabResults.append([0]*Constante.NOMBRE_INDIVIDUS)
@@ -121,6 +127,7 @@ class Affichage():
         global compteurGenerations
         global tabScoresEtParams
         global tabResults
+        global tauxMutations
         
         while self.run:
             
@@ -166,6 +173,10 @@ class Affichage():
             tabResults[compteurGenerations-1][compteurIndividus-1] = [self.score, self.paramsReseau, self.tourComplet]
             
             if compteurIndividus % Constante.NOMBRE_INDIVIDUS == 0:
+                
+                if compteurGenerations > 1 and Constante.MUTATIONS_DECROISSANTES == 'O':
+                    tauxMutations /= 1.12
+                    
                 compteurGenerations += 1
                 compteurIndividus = 0
                                 
@@ -173,7 +184,7 @@ class Affichage():
                 
                 listeTriee = algorithme_genetique.triIndividus(tabScoresEtParams)
                 listeCroisee = algorithme_genetique.croisements(listeTriee)
-                self.tabParamsAllIndiv = algorithme_genetique.mutations(listeCroisee)
+                self.tabParamsAllIndiv = algorithme_genetique.mutations(listeCroisee, tauxMutations)
                 
                 """doit on faire la selection sur tous les indivs de toutes les generations? oui : 'TE', non : 'E' (a changer dans les constantes"""
                 if Constante.METHODE_SELECTION == 'E':

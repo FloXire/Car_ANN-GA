@@ -26,6 +26,7 @@ class Constante():
     NOMBRE_NEURONES_OUT = 1
     
     CHANCE_MUTATION = 0.30
+    MUTATIONS_DECROISSANTES = 'O' #O pour oui, N pour non
     
     METHODE_SELECTION = 'E' #TE = tres ellitiste, E = ellitiste
     

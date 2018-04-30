@@ -21,6 +21,7 @@ def schemaANN(nbEntree, nbHidden, poids, save = False, emplacement = ""):
     ecartX = 800
     ecartY = 150
     rayon = 30
+    epaisseur = 15
     
     plt.close("all")
     fig = plt.figure()
@@ -74,9 +75,9 @@ def schemaANN(nbEntree, nbHidden, poids, save = False, emplacement = ""):
         j = 0
         for Poids in poidsNeuroneEntreeToHidden:
             if Poids > Constante.DETECTION_POIDS:
-                ax.add_line(lines.Line2D([coordCentreEntree[-i-1][0]+rayon+4, coordCentreHidden[-j-1][0]-rayon-4], [coordCentreEntree[-i-1][1], coordCentreHidden[-j-1][1]], linewidth = 12*abs(Poids), color = (0,1,0)))
+                ax.add_line(lines.Line2D([coordCentreEntree[-i-1][0]+rayon+4, coordCentreHidden[-j-1][0]-rayon-4], [coordCentreEntree[-i-1][1], coordCentreHidden[-j-1][1]], linewidth = epaisseur*abs(Poids), color = (0,1,0)))
             elif Poids < - Constante.DETECTION_POIDS:
-                ax.add_line(lines.Line2D([coordCentreEntree[-i-1][0]+rayon+4, coordCentreHidden[-j-1][0]-rayon-4], [coordCentreEntree[-i-1][1], coordCentreHidden[-j-1][1]], linewidth = 12*abs(Poids), color = (1,0,0)))
+                ax.add_line(lines.Line2D([coordCentreEntree[-i-1][0]+rayon+4, coordCentreHidden[-j-1][0]-rayon-4], [coordCentreEntree[-i-1][1], coordCentreHidden[-j-1][1]], linewidth = epaisseur*abs(Poids), color = (1,0,0)))
             j += 1
         i += 1        
     
@@ -85,9 +86,9 @@ def schemaANN(nbEntree, nbHidden, poids, save = False, emplacement = ""):
         l = 0
         for Poids in poidsNeuroneHiddenToSortie:
             if Poids > Constante.DETECTION_POIDS:
-                ax.add_line(lines.Line2D([coordCentreHidden[-k-1][0]+rayon+4, coordCentreSortie[-l-1][0]-rayon-4], [coordCentreHidden[-k-1][1], coordCentreSortie[-l-1][1]], linewidth = 12*abs(Poids), color = (0,1,0)))
+                ax.add_line(lines.Line2D([coordCentreHidden[-k-1][0]+rayon+4, coordCentreSortie[-l-1][0]-rayon-4], [coordCentreHidden[-k-1][1], coordCentreSortie[-l-1][1]], linewidth = epaisseur*abs(Poids), color = (0,1,0)))
             elif Poids < - Constante.DETECTION_POIDS:
-                ax.add_line(lines.Line2D([coordCentreHidden[-k-1][0]+rayon+4, coordCentreSortie[-l-1][0]-rayon-4], [coordCentreHidden[-k-1][1], coordCentreSortie[-l-1][1]], linewidth = 12*abs(Poids), color = (1,0,0)))
+                ax.add_line(lines.Line2D([coordCentreHidden[-k-1][0]+rayon+4, coordCentreSortie[-l-1][0]-rayon-4], [coordCentreHidden[-k-1][1], coordCentreSortie[-l-1][1]], linewidth = epaisseur*abs(Poids), color = (1,0,0)))
             l += 1
         k += 1
     
@@ -100,6 +101,3 @@ def schemaANN(nbEntree, nbHidden, poids, save = False, emplacement = ""):
         plt.show()
     
 #schemaANN(5,7, poids)
-    
-    
-    
