@@ -332,7 +332,7 @@ class Affichage():
                 print("Circuit termine")
                 self.tourComplet = True
                 
-                if not(circuitTermine):
+                if not(circuitTermine) and self.score <= 10000:
                     scorePremierArrive = self.score
                     circuitTermine = True
                     
