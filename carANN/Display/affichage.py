@@ -185,7 +185,7 @@ class Affichage():
             
             if compteurIndividus % Constante.NOMBRE_INDIVIDUS == 0:
                 
-                if (compteurGenerations > 1) and (Constante.MUTATIONS_DECROISSANTES == 'O'):
+                if (compteurGenerations > 1) and (Constante.MUTATIONS_DECROISSANTES == 'O') and tauxMutations > 0.001:
                     tauxMutations /= 1.12
                     
                 compteurGenerations += 1
