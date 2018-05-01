@@ -33,7 +33,7 @@ def launchANN(emplacement):
     
     for param in tabParams:
         paramsAvecNp.append(np.array(param))
-        
+    
     Affichage(tabParamsATester=paramsAvecNp)
     
     
@@ -46,6 +46,6 @@ def creationDossierGraphes():
 
 if __name__ == '__main__':
     creationDossierGraphes()
-    #launchANN("graphes/Mutations_15/fig_Date-1524358182.468281_Indiv-10_Mut-0.15_NeurHidden-7_Selection-E_Capteur-60/tabMeilleurs_Date-1524358182.468281_Indiv-10_Mut-0.15_NeurHidden-7_Selection-E_Capteur-60.txt")
-    #launchANN("graphes/Mutations_5/fig_Date-1524378627.1302252_Indiv-10_Mut-0.05_NeurHidden-7_Selection-E_Capteur-60/tabMeilleurs_Date-1524378627.1302252_Indiv-10_Mut-0.05_NeurHidden-7_Selection-E_Capteur-60.txt")
-    launchRandomANN()
+    launchANN("graphes/Mutations_decroissantes/fig_Date-1525143502.5899553_Indiv-10_Mut-0.3_NeurHidden-7_Selection-E_Capteur-60/tabMeilleurs_Date-1525143502.5899553_Indiv-10_Mut-0.3_NeurHidden-7_Selection-E_Capteur-60.txt")
+    #launchANN("graphes/Mutations_0.1/fig_Date-1524293659.6648533_Indiv-10_Mut-0.001_NeurHidden-7_Selection-E_Capteur-60/tabMeilleurs_Date-1524293659.6648533_Indiv-10_Mut-0.001_NeurHidden-7_Selection-E_Capteur-60.txt")
+    #launchRandomANN()

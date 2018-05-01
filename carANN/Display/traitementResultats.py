@@ -71,7 +71,7 @@ def enregistrerResultats(compteurGenerations, tabResults):
     tabMeilleursRanges = sorted(tabMeilleursEtParams, key = takeFirst, reverse = True)
     meilleursParams = tabMeilleursRanges[0][1]
     meilleursParamsSansNp = []
-    
+        
     for param in meilleursParams:
         meilleursParamsSansNp.append(param.tolist())
     

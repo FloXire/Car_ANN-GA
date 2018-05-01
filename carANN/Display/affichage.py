@@ -165,8 +165,18 @@ class Affichage():
             
         if not(self.run):
             
+            if self.tourComplet and not((self.donneesCircuits[self.numeroCircuit]["AngleVoiture"]-89 <= self.angle <= self.donneesCircuits[self.numeroCircuit]["AngleVoiture"]+89) \
+                                        or (self.donneesCircuits[self.numeroCircuit]["AngleVoiture"]-89 <= self.angle - 365 <= self.donneesCircuits[self.numeroCircuit]["AngleVoiture"]+89) \
+                                        or (self.donneesCircuits[self.numeroCircuit]["AngleVoiture"]-89 <= self.angle + 365 <= self.donneesCircuits[self.numeroCircuit]["AngleVoiture"]+89)):
+                self.score = 100
+                print("Un individu malin a tente de dejouer le systeme, heureusement la police l'a intercepte dans les temps")
+            
             if self.paramsATester == True:
+                print("score : "+str(self.score))
                 sys.exit()
+            
+            if self.score > 10000:
+                self.score = 100
             
             tabScoresEtParams.append((self.score, self.paramsReseau))
             
@@ -174,7 +184,7 @@ class Affichage():
             
             if compteurIndividus % Constante.NOMBRE_INDIVIDUS == 0:
                 
-                if compteurGenerations > 1 and Constante.MUTATIONS_DECROISSANTES == 'O':
+                if (compteurGenerations > 1) and (Constante.MUTATIONS_DECROISSANTES == 'O'):
                     tauxMutations /= 1.12
                     
                 compteurGenerations += 1
@@ -203,12 +213,12 @@ class Affichage():
     def initCircuit(self):
         
         file = open("CircuitCreator/circuits.txt", "r")
-        donneesCircuits = json.load(file)
+        self.donneesCircuits = json.load(file)
         
-        self.circuit = donneesCircuits[self.numeroCircuit]["Circuit"]
-        self.angle = donneesCircuits[self.numeroCircuit]["AngleVoiture"]
-        self.initCarPosition = donneesCircuits[self.numeroCircuit]["PositionVoiture"]
-        self.ligneDepart = donneesCircuits[self.numeroCircuit]["LigneDepart"]
+        self.circuit = self.donneesCircuits[self.numeroCircuit]["Circuit"]
+        self.angle = self.donneesCircuits[self.numeroCircuit]["AngleVoiture"]
+        self.initCarPosition = self.donneesCircuits[self.numeroCircuit]["PositionVoiture"]
+        self.ligneDepart = self.donneesCircuits[self.numeroCircuit]["LigneDepart"]
         
         file.close()
         
@@ -379,7 +389,12 @@ class Affichage():
         x = T.matrix('x')
         
         l_in = lasagne.layers.InputLayer((1, Constante.NOMBRE_NEURONES_IN), name="input_layer", input_var=x)
-        l_hidden = lasagne.layers.DenseLayer(l_in, Constante.NOMBRE_NEURONES_HIDDEN, name="hidden_layer", W=W_init)
+        
+        if Constante.FONCTION_ACTIVATION == 'tanh':
+            l_hidden = lasagne.layers.DenseLayer(l_in, Constante.NOMBRE_NEURONES_HIDDEN, name="hidden_layer", nonlinearity=lasagne.nonlinearities.ScaledTanh(scale_in = math.pi, scale_out = math.pi), W=W_init)
+        elif Constante.FONCTION_ACTIVATION == 'identity':
+            l_hidden = lasagne.layers.DenseLayer(l_in, Constante.NOMBRE_NEURONES_HIDDEN, name="hidden_layer", W=W_init)
+
         l_out = lasagne.layers.DenseLayer(l_hidden, Constante.NOMBRE_NEURONES_OUT, name="output_layer", nonlinearity=lasagne.nonlinearities.ScaledTanh(scale_in = math.pi, scale_out = math.pi), W=W_output)
         
         if compteurGenerations > 1 or paramsATester:

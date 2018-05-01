@@ -30,4 +30,6 @@ class Constante():
     
     METHODE_SELECTION = 'E' #TE = tres ellitiste, E = ellitiste
     
+    FONCTION_ACTIVATION = 'tanh' #tanh ou identity
+    
     DETECTION_POIDS = 0
