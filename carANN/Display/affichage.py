@@ -169,6 +169,7 @@ class Affichage():
                                         or (self.donneesCircuits[self.numeroCircuit]["AngleVoiture"]-89 <= self.angle - 365 <= self.donneesCircuits[self.numeroCircuit]["AngleVoiture"]+89) \
                                         or (self.donneesCircuits[self.numeroCircuit]["AngleVoiture"]-89 <= self.angle + 365 <= self.donneesCircuits[self.numeroCircuit]["AngleVoiture"]+89)):
                 self.score = 100
+                self.tourComplet = False
                 print("Un individu malin a tente de dejouer le systeme, heureusement la police l'a intercepte dans les temps")
             
             if self.paramsATester == True:
