@@ -25,8 +25,8 @@ class Constante():
     NOMBRE_NEURONES_HIDDEN = 7
     NOMBRE_NEURONES_OUT = 1
     
-    CHANCE_MUTATION = 0.30
-    MUTATIONS_DECROISSANTES = 'O' #O pour oui, N pour non
+    CHANCE_MUTATION = 0.001
+    MUTATIONS_DECROISSANTES = 'N' #O pour oui, N pour non
     
     METHODE_SELECTION = 'E' #TE = tres ellitiste, E = ellitiste
     

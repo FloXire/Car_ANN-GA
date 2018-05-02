@@ -156,9 +156,14 @@ class Affichage():
             if self.score % 100 == 0:
                 if self.testBoucleInfinie(self.coordTestBoucleInf):
                     self.score -= 100 #malus
+                    print("individu qui tourne sur lui meme")
                     self.run = False
                 else:
                     self.coordTestBoucleInf = self.positionVoiture.center
+            
+                if self.score > 10000:
+                    self.run = False
+            
             
             pygame.display.flip() #On affiche tous les elements a l ecran 
             
