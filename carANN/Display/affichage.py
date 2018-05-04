@@ -22,8 +22,7 @@ import sys
 
 from Commun.constantes import Constante
 from AlgoGen import algorithme_genetique
-from Display.traitementResultats import afficherResultats, enregistrerResultats, takeFirst
-from Display.drawANN import schemaANN
+from ApresResultats.traitementResultats import afficherResultats, enregistrerResultats, takeFirst
 
 tauxMutations = Constante.CHANCE_MUTATION
 

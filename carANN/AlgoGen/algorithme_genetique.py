@@ -44,12 +44,16 @@ def croisements(tabParams):
                 
                 for poidsOneInToAllHidden in range(Constante.NOMBRE_NEURONES_IN): #pour chaque ensemble de poids d'un neurone en entree a TOUS les neurones de la couche cachee
                     for poidsOneInToOneHidden in range(Constante.NOMBRE_NEURONES_HIDDEN): #pour chaque poids d'un neurone en entree a UN neurone de la couche cachee
-                        meanOrCrossover = np.random.random_integers(0, 1) #soit 0, soit 1
                         
-                        if meanOrCrossover == 0: #on fait la moyenne des parametres
+                        if Constante.METHODE_CROISEMENT == 'hybride':
+                            meanOrCrossover = np.random.random_integers(0, 1) #soit 0, soit 1
+                        else:
+                            meanOrCrossover = -1
+                        
+                        if (meanOrCrossover == 0) or (Constante.METHODE_CROISEMENT == 'moyenne'): #on fait la moyenne des parametres
                             newParam = (param[0][poidsOneInToAllHidden][poidsOneInToOneHidden] + param[1][poidsOneInToAllHidden][poidsOneInToOneHidden]) / 2
                                         
-                        elif meanOrCrossover == 1: #on recopie le parametre d'un des deux parents a l'identique
+                        elif (meanOrCrossover == 1) or (Constante.METHODE_CROISEMENT == 'crossover'): #on recopie le parametre d'un des deux parents a l'identique
                             parent = np.random.random_integers(0, 1) #on choisit aleatoirement de quel parent le nouvel individu va recevoir le parametre
                             newParam = param[parent][poidsOneInToAllHidden][poidsOneInToOneHidden]
                         
