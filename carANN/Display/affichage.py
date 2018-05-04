@@ -164,7 +164,7 @@ class Affichage():
                     self.run = False
             
             
-            pygame.display.flip() #On affiche tous les elements a l ecran 
+            #pygame.display.flip() #On affiche tous les elements a l ecran 
             
             
         if not(self.run):

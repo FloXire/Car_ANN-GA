@@ -1,6 +1,10 @@
 '''
-Created on 30 avr. 2018
+Created on 4 mai 2018
 
+@author: flo-1
+'''
+'''
+Created on 30 avr. 2018
 @author: flo-1
 '''
 
@@ -13,7 +17,7 @@ import numpy as np
 
 def moyenneNuage(pathFolder):
     
-    #print(pathFolder)
+    print(pathFolder)
     
     emplacementTabs = []
     tabMeilleurs = []
@@ -21,11 +25,10 @@ def moyenneNuage(pathFolder):
     
     for path, dirs, files in os.walk(pathFolder):
         for dir in dirs:
-            #print(os.path.normpath(glob.glob(pathFolder+'/'+dir+'/tab*.txt')[0]))
+            print(os.path.normpath(glob.glob(pathFolder+'/'+dir+'/tab*.txt')[0]))
             emplacementTabs.append(os.path.normpath(glob.glob(pathFolder+'/'+dir+'/tab*.txt')[0]))
-
+    
     for pathTab in emplacementTabs:
-        print(pathTab)
         f = open(pathTab, 'r')
         tabTout = json.load(f)
         tabMeilleurs.append(tabTout[0])
@@ -55,7 +58,7 @@ def moyenneNuage(pathFolder):
             j += 1
         moyenne3 /= j
         tabMoyenne3Meilleurs.append(moyenne3)
-            
+    
     fileTabs = open(os.path.normpath(pathFolder + '/tabsMoyenne5Exp.txt'), 'w')
     dataFileTabs = [tabMoyenneMeilleurs, tabMoyenne3Meilleurs]
     json.dump(dataFileTabs, fileTabs)
@@ -80,25 +83,11 @@ def moyenneNuage(pathFolder):
             ax = ax.set(xlabel="Numero de la generation", ylabel="Score")
             plt.plot(x, tabMoyenneMeilleurs, 'x')
             plt.savefig(os.path.normpath(pathFolder + '/moyenne5ExpMeilleurs'))
-            
-            
-def launchMoyennes(pathDansGraphe):
-    i=0
-    while (i == 0):
-        for path, dirs, files in os.walk(pathDansGraphe):
-            for dir in dirs:
-                if dir[0:3] != 'fig':
-                    moyenneNuage(os.path.normpath(pathDansGraphe+'/'+dir))
-            i += 1
-
-
-def launchAllMoyennes(pathRacine):
-    i=0
-    while (i == 0):
-        for path, dirs, files in os.walk(pathRacine):
-            for dir in dirs:
-                launchMoyennes(os.path.normpath(pathRacine+'/'+dir))
-            i += 1
-    
-    
-launchAllMoyennes('../graphes')
+     
+i=0
+while (i == 0):
+    for path, dirs, files in os.walk('../graphes'):
+        for dir in dirs:
+            moyenneNuage(os.path.normpath('../graphes'+'/'+dir))
+        i += 1
+#moyenneNuage('../graphes/Tanh')

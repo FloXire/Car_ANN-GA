@@ -30,10 +30,11 @@ def croisements(tabParams):
                     
         individu1 = np.random.randint(Constante.NOMBRE_INDIVIDUS_CROISEMENT) #nombre entre 0 et (NOMBRE_INDIVIDUS_CROISEMENT-1)
         individu2 = np.random.randint(Constante.NOMBRE_INDIVIDUS_CROISEMENT)
-                    
-        while (individu2 == individu1) or ([individu1, individu2] in tabPairesParents) or ([individu2, individu1] in tabPairesParents): #ainsi, individu1 != individu2
-            individu1 = np.random.randint(Constante.NOMBRE_INDIVIDUS_CROISEMENT) 
-            individu2 = np.random.randint(Constante.NOMBRE_INDIVIDUS_CROISEMENT)
+        
+        if not(Constante.POSSIB_DAVOIR_MOINS_DINDIVIDUS):
+            while (individu2 == individu1) or ([individu1, individu2] in tabPairesParents) or ([individu2, individu1] in tabPairesParents): #ainsi, individu1 != individu2
+                individu1 = np.random.randint(Constante.NOMBRE_INDIVIDUS_CROISEMENT) 
+                individu2 = np.random.randint(Constante.NOMBRE_INDIVIDUS_CROISEMENT)
         
         tabPairesParents.append([individu1, individu2])
         
@@ -63,12 +64,13 @@ def croisements(tabParams):
                 
                 for poidsOneHiddenToAllOut in range(Constante.NOMBRE_NEURONES_HIDDEN): #pour chaque ensemble de poids d'un neurone de la couche cachee a TOUS les neurones de la couche de sortie
                     for poidsOneHiddenToOneOut in range(Constante.NOMBRE_NEURONES_OUT): #pour chaque poids d'un neurone de la couche cachee a UN neurone de la couche de sortie
-                        meanOrCrossover = np.random.random_integers(0, 1)
+                        if Constante.METHODE_CROISEMENT == 'hybride':
+                            meanOrCrossover = np.random.random_integers(0, 1)
                         
-                        if meanOrCrossover == 0: #on fait la moyenne des parametres des deux parents
+                        if (meanOrCrossover == 0) or (Constante.METHODE_CROISEMENT == 'moyenne'): #on fait la moyenne des parametres des deux parents
                             newParam = (param[0][poidsOneHiddenToAllOut][poidsOneHiddenToOneOut] + param[1][poidsOneHiddenToAllOut][poidsOneHiddenToOneOut]) / 2
                             
-                        elif meanOrCrossover == 1: #on recopie le parametre d'un des deux parents a l'identique
+                        elif (meanOrCrossover == 1) or (Constante.METHODE_CROISEMENT == 'crossover'): #on recopie le parametre d'un des deux parents a l'identique
                             parent = np.random.random_integers(0, 1) #on choisit aleatoirement de quel parent le nouvel individu va recevoir le parametre
                             newParam = param[parent][poidsOneHiddenToAllOut][poidsOneHiddenToOneOut]
                             
