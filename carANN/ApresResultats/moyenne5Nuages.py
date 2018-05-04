@@ -11,9 +11,12 @@ import matplotlib.pyplot as plt
 from matplotlib import ticker
 import numpy as np
 
+cwd = os.getcwd()
+mainDirectory = os.path.abspath(os.path.join(cwd, os.pardir))
+
 def moyenneNuage(pathFolder):
     
-    #print(pathFolder)
+    print(pathFolder)
     
     emplacementTabs = []
     tabMeilleurs = []
@@ -101,4 +104,4 @@ def launchAllMoyennes(pathRacine):
             i += 1
     
     
-launchAllMoyennes('../graphes')
+launchAllMoyennes(os.path.normpath(mainDirectory + '/graphes'))

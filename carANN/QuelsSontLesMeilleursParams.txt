@@ -1,0 +1,20 @@
+Les resultats des tests sont les suivants : 
+
+    - parametre : Capteurs, categorie : meilleurs, le meilleur sous-parametre est : Capteur_40
+    - parametre : Capteurs, categorie : 3meilleurs, le meilleur sous-parametre est : Capteur_40
+
+    - parametre : Croisement, categorie : meilleurs, le meilleur sous-parametre est : Croisement_Hybride
+    - parametre : Croisement, categorie : 3meilleurs, le meilleur sous-parametre est : Croisement_Hybride
+
+    - parametre : FonctionHidden, categorie : meilleurs, le meilleur sous-parametre est : FonctionHidden_Identity
+    - parametre : FonctionHidden, categorie : 3meilleurs, le meilleur sous-parametre est : FonctionHidden_Identity
+
+    - parametre : Mutations, categorie : meilleurs, le meilleur sous-parametre est : Mutations_5
+    - parametre : Mutations, categorie : 3meilleurs, le meilleur sous-parametre est : Mutations_5
+
+    - parametre : NeuronesHidden, categorie : meilleurs, le meilleur sous-parametre est : NeuronesHidden_3
+    - parametre : NeuronesHidden, categorie : 3meilleurs, le meilleur sous-parametre est : NeuronesHidden_3
+
+    - parametre : Selection, categorie : meilleurs, le meilleur sous-parametre est : Selection_TresElitiste
+    - parametre : Selection, categorie : 3meilleurs, le meilleur sous-parametre est : Selection_Elitiste
+
