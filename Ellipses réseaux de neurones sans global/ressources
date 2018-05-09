@@ -1,0 +1,33 @@
+découper l'image par groupes de 5*5 pixels et faire la moyenne des couleurs de ces pixels
+prendre tous les pixels de l'image et les stocker dans couleurs dispos
+
+prendre 20 points dans chaque ellipse et tester la somme des fitness
+
+pygame .convert_alpha pour eavoir de la transparence ?
+
+list(pointsCircuit.read()) --> donne une liste contenant chaque caractère du fichier
+
+cv2 : premier px en haut à gauche
+plt : en bas à gauche
+
+img[1,2] --> 1 est le y, 2 le x
+
+croisement : pour w et h --> garder le meilleur ADN (w ou h) , tout le temps changer l'autre
+			pour la couleur --> peut etre essayer de trouver les voisins et ceux qui ont le meilleur taux de réussite
+
+ctrl+e : parcours de tous les packages
+ctrl+o : parcours de ttes les fonctions, var etc
+ctrl+q : dernier truc que j'ai modifié
+ctrl+d : suppr la ligne en cours
+ctrl+fleches directionnelles : plutôt utiles saute de mot en mot
+shift+fleches directionnelles : truc du prof, possib de l'associer avec ctrl pour plus rapide
+ctrl+shift+fleches haut, bas : aller de fonctions en fonctions
+ctrl+h : rechercher dans tt le programme
+surligne un mot + ctrl+k : rechercher l'occurence suivante du mot
+ctrl+l = go to line
+ctrl+m : plein écran
+
+94: [<matplotlib.patches.Ellipse object at 0x0D3A7130>, (0.23921568627450981, 0.2549019607843137, 0.5607843137254902), 58, 26, (556, 321), ((556, 321), (556, 334.0), (556, 308.0), (527.0, 321), (585.0, 321), (556, 328.0), (556, 315.0), (542.0, 321), (571.0, 321), (542.0, 328.0), (571.0, 328.0), (542.0, 315.0), (571.0, 315.0)), 137.94509803921568]
+94: [<matplotlib.patches.Ellipse object at 0x11D71310>, (0.23921568627450981, 0.2549019607843137, 0.5607843137254902), 7, 26, (556, 321), ((556, 321), (556, 334.0), (556, 308.0), (552.0, 321), (560.0, 321), (556, 328.0), (556, 315.0), (554.0, 321), (558.0, 321), (554.0, 328.0), (558.0, 328.0), (554.0, 315.0), (558.0, 315.0)), 137.94509803921568]
+
+bonne figure mais les couleurs semblent etre inversees
