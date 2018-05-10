@@ -416,6 +416,6 @@ class Affichage():
     
     def retourReseau(self, distances):
         inputNet = np.array([distances])
-        #print(f(inputNet))
+        print(self.f(inputNet))
         return self.f(inputNet)
     

@@ -1,20 +1,23 @@
 Les resultats des tests sont les suivants : 
 
-    - parametre : Capteurs, categorie : meilleurs, le meilleur sous-parametre est : Capteur_40
-    - parametre : Capteurs, categorie : 3meilleurs, le meilleur sous-parametre est : Capteur_40
+    - parametre : Capteurs, categorie : meilleurs, le classement des meilleurs sous-parametres est : 1 - Capteur_40, 2 - Capteur_60, 3 - Capteur_90, 4 - Capteur_150
+    - parametre : Capteurs, categorie : 3meilleurs, le classement des meilleurs sous-parametres est : 1 - Capteur_40, 2 - Capteur_60, 3 - Capteur_90, 4 - Capteur_150
 
-    - parametre : Croisement, categorie : meilleurs, le meilleur sous-parametre est : Croisement_Hybride
-    - parametre : Croisement, categorie : 3meilleurs, le meilleur sous-parametre est : Croisement_Hybride
+    - parametre : Croisement, categorie : meilleurs, le classement des meilleurs sous-parametres est : 1 - Croisement_Hybride, 2 - Croisement_Moyenne, 3 - Croisement_Crossover
+    - parametre : Croisement, categorie : 3meilleurs, le classement des meilleurs sous-parametres est : 1 - Croisement_Moyenne, 2 - Croisement_Hybride, 3 - Croisement_Crossover
 
-    - parametre : FonctionHidden, categorie : meilleurs, le meilleur sous-parametre est : FonctionHidden_Identity
-    - parametre : FonctionHidden, categorie : 3meilleurs, le meilleur sous-parametre est : FonctionHidden_Identity
+    - parametre : FonctionHidden, categorie : meilleurs, le classement des meilleurs sous-parametres est : 1 - FonctionHidden_Identity, 2 - FonctionHidden_Tanh, 3 - FonctionHidden_Rectify
+    - parametre : FonctionHidden, categorie : 3meilleurs, le classement des meilleurs sous-parametres est : 1 - FonctionHidden_Identity, 2 - FonctionHidden_Tanh, 3 - FonctionHidden_Rectify
 
-    - parametre : Mutations, categorie : meilleurs, le meilleur sous-parametre est : Mutations_5
-    - parametre : Mutations, categorie : 3meilleurs, le meilleur sous-parametre est : Mutations_5
+    - parametre : Mutations, categorie : meilleurs, le classement des meilleurs sous-parametres est : 1 - Mutations_5, 2 - Mutations_Decroissantes, 3 - Mutations_15, 4 - Mutations_1, 5 - Mutations_30, 6 - Mutations_0.1
+    - parametre : Mutations, categorie : 3meilleurs, le classement des meilleurs sous-parametres est : 1 - Mutations_5, 2 - Mutations_Decroissantes, 3 - Mutations_1, 4 - Mutations_0.1, 5 - Mutations_15, 6 - Mutations_30
 
-    - parametre : NeuronesHidden, categorie : meilleurs, le meilleur sous-parametre est : NeuronesHidden_3
-    - parametre : NeuronesHidden, categorie : 3meilleurs, le meilleur sous-parametre est : NeuronesHidden_3
+    - parametre : NeuronesHidden, categorie : meilleurs, le classement des meilleurs sous-parametres est : 1 - NeuronesHidden_3, 2 - NeuronesHidden_12, 3 - NeuronesHidden_7, 4 - NeuronesHidden_50
+    - parametre : NeuronesHidden, categorie : 3meilleurs, le classement des meilleurs sous-parametres est : 1 - NeuronesHidden_3, 2 - NeuronesHidden_12, 3 - NeuronesHidden_7, 4 - NeuronesHidden_50
 
-    - parametre : Selection, categorie : meilleurs, le meilleur sous-parametre est : Selection_TresElitiste
-    - parametre : Selection, categorie : 3meilleurs, le meilleur sous-parametre est : Selection_Elitiste
+    - parametre : NombreIndividus, categorie : meilleurs, le classement des meilleurs sous-parametres est : 1 - NombreIndividus_40, 2 - NombreIndividus_20, 3 - NombreIndividus_10, 4 - NombreIndividus_5
+    - parametre : NombreIndividus, categorie : 3meilleurs, le classement des meilleurs sous-parametres est : 1 - NombreIndividus_40, 2 - NombreIndividus_20, 3 - NombreIndividus_10, 4 - NombreIndividus_5
+
+    - parametre : Selection, categorie : meilleurs, le classement des meilleurs sous-parametres est : 1 - Selection_TresElitiste, 2 - Selection_Elitiste
+    - parametre : Selection, categorie : 3meilleurs, le classement des meilleurs sous-parametres est : 1 - Selection_Elitiste, 2 - Selection_TresElitiste
 

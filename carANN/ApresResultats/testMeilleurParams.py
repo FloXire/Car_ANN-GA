@@ -7,6 +7,7 @@ Created on 4 mai 2018
 import os
 import glob
 import json
+from ApresResultats.traitementResultats import takeFirst
 
 cwd = os.getcwd()
 mainDirectory = os.path.abspath(os.path.join(cwd, os.pardir))
@@ -46,8 +47,13 @@ def testMeilleursParams(pathFolder):
     resultats = "Les resultats des tests sont les suivants : \n\n"
     for item in dicoReponseQuiEstLeMeilleur.items():
         for item2 in item[1].items():
-            resultats += "    - parametre : " + str(item[0]) + ", categorie : " + str(item2[0]) + ", le meilleur sous-parametre est : " + str(item2[1]) + "\n"
-        resultats += "\n"        
+            resultats += "    - parametre : " + str(item[0]) + ", categorie : " + str(item2[0]) + ", le classement des meilleurs sous-parametres est : "
+            for i in range(len(item2[1])):
+                resultats += str(i+1) + " - " + str(item2[1][i])
+                if i != len(item2[1])-1:
+                    resultats += ", "
+            resultats += "\n"  
+        resultats += "\n"      
     
     print(resultats)
     
@@ -121,7 +127,16 @@ def distanceALaMoyenne(pt, ptMoyenne):
 
 
 def quiEstLeMeilleur(dicoNumeroSousDossier, param, tabEcartsMoy):
-    return(dicoNumeroSousDossier[param][tabEcartsMoy.index(max(tabEcartsMoy))])
+    
+    preClassement = zip(tabEcartsMoy, range(len(tabEcartsMoy)))
+    classement = sorted(preClassement, key = takeFirst, reverse = True)
+    classementSansResult = [classement[i][1] for i in range(len(classement))]
+
+    retourClassement = []
+    for j in classementSansResult:
+        retourClassement.append(dicoNumeroSousDossier[param][j])
+        
+    return retourClassement
 
 
 testMeilleursParams(pathGraphes)
