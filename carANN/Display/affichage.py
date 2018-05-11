@@ -92,8 +92,6 @@ class Affichage():
         
         self.tabParamsAllIndiv = tabParamsANN
         
-        print(len(self.tabParamsAllIndiv))
-        
         self.tourComplet = False
         
         #if compteurGenerations > 1 :

@@ -60,6 +60,7 @@ def launchBestANN():
                                 if dir4[:3] == 'tab':
                                     f = open(os.path.normpath(pathGraphes+'/'+dir+'/'+dir2+'/'+dir3+'/'+dir4))
                                     listeParamsBestSansNp.append(json.load(f)[2])
+                                    f.close()
     
     for tabParams in listeParamsBestSansNp:
         listeParamsBestAvecNp.append(paramsNp(tabParams))                                    
