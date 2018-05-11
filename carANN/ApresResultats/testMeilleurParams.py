@@ -49,9 +49,9 @@ def testMeilleursParams(pathFolder):
         for item2 in item[1].items():
             resultats += "    - parametre : " + str(item[0]) + ", categorie : " + str(item2[0]) + ", le classement des meilleurs sous-parametres est : "
             for i in range(len(item2[1])):
-                resultats += str(i+1) + " - " + str(item2[1][i])
-                if i != len(item2[1])-1:
-                    resultats += ", "
+                resultats += str(i+1) + " - " + str(item2[1][i][0]) + ", score : " + str(int(item2[1][i][1])) + ". "
+                #if i != len(item2[1])-1:
+                #    resultats += ". "
             resultats += "\n"  
         resultats += "\n"      
     
@@ -130,11 +130,14 @@ def quiEstLeMeilleur(dicoNumeroSousDossier, param, tabEcartsMoy):
     
     preClassement = zip(tabEcartsMoy, range(len(tabEcartsMoy)))
     classement = sorted(preClassement, key = takeFirst, reverse = True)
-    classementSansResult = [classement[i][1] for i in range(len(classement))]
+    #classementSansResult = [classement[i][1] for i in range(len(classement))]
 
     retourClassement = []
-    for j in classementSansResult:
-        retourClassement.append(dicoNumeroSousDossier[param][j])
+    #for j in classementSansResult:
+    for scoreEtNumber in classement:
+        retourClassement.append((dicoNumeroSousDossier[param][scoreEtNumber[1]], scoreEtNumber[0]))
+        
+    print(retourClassement)
         
     return retourClassement
 

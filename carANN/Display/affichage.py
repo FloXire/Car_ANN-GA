@@ -92,11 +92,14 @@ class Affichage():
         
         self.tabParamsAllIndiv = tabParamsANN
         
+        print(len(self.tabParamsAllIndiv))
+        
         self.tourComplet = False
         
-        if compteurGenerations > 1:
+        #if compteurGenerations > 1 :
+        if len(self.tabParamsAllIndiv) != 0:
             self.tabParamsCurrentIndiv = self.tabParamsAllIndiv[compteurIndividus-1]
-            
+                
         if tabParamsATester != []:
             self.tabParamsCurrentIndiv = tabParamsATester
             self.paramsATester = True  
@@ -164,10 +167,12 @@ class Affichage():
                     self.run = False
             
             
-            #pygame.display.flip() #On affiche tous les elements a l ecran 
+            pygame.display.flip() #On affiche tous les elements a l ecran 
             
             
         if not(self.run):
+            
+            print(self.score)
             
             if self.tourComplet and not((self.donneesCircuits[self.numeroCircuit]["AngleVoiture"]-89 <= self.angle <= self.donneesCircuits[self.numeroCircuit]["AngleVoiture"]+89) \
                                         or (self.donneesCircuits[self.numeroCircuit]["AngleVoiture"]-89 <= self.angle - 365 <= self.donneesCircuits[self.numeroCircuit]["AngleVoiture"]+89) \
@@ -402,7 +407,7 @@ class Affichage():
 
         l_out = lasagne.layers.DenseLayer(l_hidden, Constante.NOMBRE_NEURONES_OUT, name="output_layer", nonlinearity=lasagne.nonlinearities.ScaledTanh(scale_in = math.pi, scale_out = math.pi), W=W_output)
         
-        if compteurGenerations > 1 or paramsATester:
+        if (len(self.tabParamsAllIndiv) != 0 or paramsATester):
             lasagne.layers.set_all_param_values(l_out, self.tabParamsCurrentIndiv)
         
         y = lasagne.layers.get_output(l_out)
@@ -416,6 +421,5 @@ class Affichage():
     
     def retourReseau(self, distances):
         inputNet = np.array([distances])
-        print(self.f(inputNet))
         return self.f(inputNet)
     

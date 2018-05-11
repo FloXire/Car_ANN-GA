@@ -1,23 +1,23 @@
 Les resultats des tests sont les suivants : 
 
-    - parametre : Capteurs, categorie : meilleurs, le classement des meilleurs sous-parametres est : 1 - Capteur_40, 2 - Capteur_60, 3 - Capteur_90, 4 - Capteur_150
-    - parametre : Capteurs, categorie : 3meilleurs, le classement des meilleurs sous-parametres est : 1 - Capteur_40, 2 - Capteur_60, 3 - Capteur_90, 4 - Capteur_150
+    - parametre : Capteurs, categorie : meilleurs, le classement des meilleurs sous-parametres est : 1 - Capteur_40, score : 32883. 2 - Capteur_60, score : 18837. 3 - Capteur_90, score : 1. 4 - Capteur_150, score : -51722. 
+    - parametre : Capteurs, categorie : 3meilleurs, le classement des meilleurs sous-parametres est : 1 - Capteur_40, score : 10820. 2 - Capteur_60, score : 8588. 3 - Capteur_90, score : 5826. 4 - Capteur_150, score : -25236. 
 
-    - parametre : Croisement, categorie : meilleurs, le classement des meilleurs sous-parametres est : 1 - Croisement_Hybride, 2 - Croisement_Moyenne, 3 - Croisement_Crossover
-    - parametre : Croisement, categorie : 3meilleurs, le classement des meilleurs sous-parametres est : 1 - Croisement_Moyenne, 2 - Croisement_Hybride, 3 - Croisement_Crossover
+    - parametre : Croisement, categorie : meilleurs, le classement des meilleurs sous-parametres est : 1 - Croisement_Hybride, score : 15916. 2 - Croisement_Moyenne, score : 12454. 3 - Croisement_Crossover, score : -28370. 
+    - parametre : Croisement, categorie : 3meilleurs, le classement des meilleurs sous-parametres est : 1 - Croisement_Moyenne, score : 11056. 2 - Croisement_Hybride, score : 8306. 3 - Croisement_Crossover, score : -19362. 
 
-    - parametre : FonctionHidden, categorie : meilleurs, le classement des meilleurs sous-parametres est : 1 - FonctionHidden_Identity, 2 - FonctionHidden_Tanh, 3 - FonctionHidden_Rectify
-    - parametre : FonctionHidden, categorie : 3meilleurs, le classement des meilleurs sous-parametres est : 1 - FonctionHidden_Identity, 2 - FonctionHidden_Tanh, 3 - FonctionHidden_Rectify
+    - parametre : FonctionHidden, categorie : meilleurs, le classement des meilleurs sous-parametres est : 1 - FonctionHidden_Identity, score : 27514. 2 - FonctionHidden_Tanh, score : -10915. 3 - FonctionHidden_Rectify, score : -16598. 
+    - parametre : FonctionHidden, categorie : 3meilleurs, le classement des meilleurs sous-parametres est : 1 - FonctionHidden_Identity, score : 9059. 2 - FonctionHidden_Tanh, score : -4440. 3 - FonctionHidden_Rectify, score : -4618. 
 
-    - parametre : Mutations, categorie : meilleurs, le classement des meilleurs sous-parametres est : 1 - Mutations_5, 2 - Mutations_Decroissantes, 3 - Mutations_15, 4 - Mutations_1, 5 - Mutations_30, 6 - Mutations_0.1
-    - parametre : Mutations, categorie : 3meilleurs, le classement des meilleurs sous-parametres est : 1 - Mutations_5, 2 - Mutations_Decroissantes, 3 - Mutations_1, 4 - Mutations_0.1, 5 - Mutations_15, 6 - Mutations_30
+    - parametre : Mutations, categorie : meilleurs, le classement des meilleurs sous-parametres est : 1 - Mutations_5, score : 20215. 2 - Mutations_Decroissantes, score : 13372. 3 - Mutations_15, score : 9363. 4 - Mutations_1, score : -5648. 5 - Mutations_30, score : -8458. 6 - Mutations_0.1, score : -28844. 
+    - parametre : Mutations, categorie : 3meilleurs, le classement des meilleurs sous-parametres est : 1 - Mutations_5, score : 30294. 2 - Mutations_Decroissantes, score : 29455. 3 - Mutations_1, score : 5421. 4 - Mutations_0.1, score : 4635. 5 - Mutations_15, score : -25658. 6 - Mutations_30, score : -44148. 
 
-    - parametre : NeuronesHidden, categorie : meilleurs, le classement des meilleurs sous-parametres est : 1 - NeuronesHidden_3, 2 - NeuronesHidden_12, 3 - NeuronesHidden_7, 4 - NeuronesHidden_50
-    - parametre : NeuronesHidden, categorie : 3meilleurs, le classement des meilleurs sous-parametres est : 1 - NeuronesHidden_3, 2 - NeuronesHidden_12, 3 - NeuronesHidden_7, 4 - NeuronesHidden_50
+    - parametre : NeuronesHidden, categorie : meilleurs, le classement des meilleurs sous-parametres est : 1 - NeuronesHidden_3, score : 8544. 2 - NeuronesHidden_12, score : 7952. 3 - NeuronesHidden_7, score : -3863. 4 - NeuronesHidden_50, score : -12633. 
+    - parametre : NeuronesHidden, categorie : 3meilleurs, le classement des meilleurs sous-parametres est : 1 - NeuronesHidden_3, score : 14923. 2 - NeuronesHidden_12, score : 5243. 3 - NeuronesHidden_7, score : -1379. 4 - NeuronesHidden_50, score : -18787. 
 
-    - parametre : NombreIndividus, categorie : meilleurs, le classement des meilleurs sous-parametres est : 1 - NombreIndividus_40, 2 - NombreIndividus_20, 3 - NombreIndividus_10, 4 - NombreIndividus_5
-    - parametre : NombreIndividus, categorie : 3meilleurs, le classement des meilleurs sous-parametres est : 1 - NombreIndividus_40, 2 - NombreIndividus_20, 3 - NombreIndividus_10, 4 - NombreIndividus_5
+    - parametre : NombreIndividus, categorie : meilleurs, le classement des meilleurs sous-parametres est : 1 - NombreIndividus_40, score : 37440. 2 - NombreIndividus_20, score : 17909. 3 - NombreIndividus_10, score : -21203. 4 - NombreIndividus_5, score : -34146. 
+    - parametre : NombreIndividus, categorie : 3meilleurs, le classement des meilleurs sous-parametres est : 1 - NombreIndividus_40, score : 25623. 2 - NombreIndividus_20, score : 11973. 3 - NombreIndividus_10, score : -13554. 4 - NombreIndividus_5, score : -24042. 
 
-    - parametre : Selection, categorie : meilleurs, le classement des meilleurs sous-parametres est : 1 - Selection_TresElitiste, 2 - Selection_Elitiste
-    - parametre : Selection, categorie : 3meilleurs, le classement des meilleurs sous-parametres est : 1 - Selection_Elitiste, 2 - Selection_TresElitiste
+    - parametre : Selection, categorie : meilleurs, le classement des meilleurs sous-parametres est : 1 - Selection_TresElitiste, score : 1337. 2 - Selection_Elitiste, score : -1337. 
+    - parametre : Selection, categorie : 3meilleurs, le classement des meilleurs sous-parametres est : 1 - Selection_Elitiste, score : 1054. 2 - Selection_TresElitiste, score : -1054. 
 
