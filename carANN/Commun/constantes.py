@@ -13,7 +13,7 @@ class Constante():
     NOMBRE_INDIVIDUS_CROISEMENT = NOMBRE_INDIVIDUS//2 #il s'agit du nombre d'individus qui seront pris pour parents de la nouvelle generation
     POSSIB_DAVOIR_MOINS_DINDIVIDUS = False #si True : possibilite davoir moins de 8 indivs mais risque non nul d'avoir des paires de parents identiques
     
-    NUMERO_CIRCUIT = 1
+    NUMERO_CIRCUIT = 2
     VITESSE = 1
     DISTANCE_MAX_CAPTEURS = 60
     
@@ -29,7 +29,7 @@ class Constante():
     CHANCE_MUTATION = 0.01
     MUTATIONS_DECROISSANTES = 'N' #O pour oui, N pour non
     
-    METHODE_SELECTION = 'E' #TE = tres ellitiste, E = ellitiste
+    METHODE_SELECTION = 'TE' #TE = tres ellitiste, E = ellitiste
     
     METHODE_CROISEMENT = 'hybride' #hybride, moyenne ou crossover
     

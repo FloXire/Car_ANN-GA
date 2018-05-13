@@ -5,6 +5,7 @@ Created on 6 mars 2018
 '''
 
 from Display.affichage import Affichage
+from ApresResultats.drawANN import moyenneAllPoids, schemaANN
 import os
 import json
 import numpy as np
@@ -33,7 +34,7 @@ def launchANN(emplacement):
         
         i+=1
     """      
-    
+        
     fileParams = open(emplacement, 'r')
     tabParams = json.load(fileParams)[2]
     
@@ -65,6 +66,9 @@ def launchBestANN():
     for tabParams in listeParamsBestSansNp:
         listeParamsBestAvecNp.append(paramsNp(tabParams))                                    
     
+    #poidsMoyens = moyenneAllPoids(listeParamsBestAvecNp)
+    #schemaANN(5, 7, poidsMoyens, save = True, emplacement = os.path.normpath(os.getcwd()+'/schemaMoyenneAllIndivs.png'))
+    
     Affichage(tabParamsANN=listeParamsBestAvecNp)
 
 def creationDossierGraphes():
@@ -76,7 +80,7 @@ def creationDossierGraphes():
 
 if __name__ == '__main__':
     creationDossierGraphes()
-    #launchANN("graphes/Mutations_0.1/fig_Date-1524280546.981705_Indiv-10_Mut-0.001_NeurHidden-7_Selection-E_Capteur-60/tabMeilleurs_Date-1524280546.981705_Indiv-10_Mut-0.001_NeurHidden-7_Selection-E_Capteur-60.txt")
-    #launchANN("graphes/Elitiste/fig_Date-1524771742.6350503_Indiv-10_Mut-0.15_NeurHidden-7_Selection-E_Capteur-60/tabMeilleurs_Date-1524771742.6350503_Indiv-10_Mut-0.15_NeurHidden-7_Selection-E_Capteur-60.txt")
-    launchBestANN()
+    launchANN("graphes/Selection/Selection_TresElitiste/fig_Date-1525283096.7613318_Indiv-10_Mut-0.15_NeurHidden-7_Selection-TE_Capteur-60/tabMeilleurs_Date-1525283096.7613318_Indiv-10_Mut-0.15_NeurHidden-7_Selection-TE_Capteur-60.txt")
+    #launchANN("ResultatsEvolutionBest/fig_Date-1526143293.3023612_Indiv-75_Mut-0.01_NeurHidden-7_Selection-TE_Capteur-60/tabMeilleurs_Date-1526143293.3023612_Indiv-75_Mut-0.01_NeurHidden-7_Selection-TE_Capteur-60.txt")
+    #launchBestANN()
     #launchRandomANN()

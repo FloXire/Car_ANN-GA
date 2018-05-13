@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import matplotlib.lines as lines
 import json
+import numpy as np
 
 from Commun.constantes import Constante
 
@@ -16,6 +17,44 @@ filePoids = open(emplacement, 'r')
 poids = json.load(filePoids)[2]
 print(poids)"""
 
+
+def moyenneAllPoids(tabAllPoids):
+    i=0
+    j=0
+    k=0
+    poidsMoyennes = [np.zeros((Constante.NOMBRE_NEURONES_IN, Constante.NOMBRE_NEURONES_HIDDEN)), np.zeros((Constante.NOMBRE_NEURONES_HIDDEN)), np.zeros((Constante.NOMBRE_NEURONES_HIDDEN, Constante.NOMBRE_NEURONES_OUT)), np.zeros((Constante.NOMBRE_NEURONES_OUT))]
+    
+    for params in tabAllPoids:
+        for array in params:
+            if i%2 == 0:
+                for setOfWeight in array:
+                    for weight in setOfWeight:
+                        poidsMoyennes[i][j][k] += weight
+                        k+=1
+                    k=0
+                    j+=1
+            j=0
+            k=0
+            i+=1
+        i=0
+        
+    l=0
+    m=0
+    n=0
+    for array in poidsMoyennes:
+        if l %2 == 0:
+            for setOfMeanWeight in array:
+                for meanWeight in setOfMeanWeight:
+                    poidsMoyennes[l][m][n] /= 75
+                    n+=1
+                n=0
+                m+=1
+        m=0
+        l+=1
+    l=0
+    
+    return poidsMoyennes
+    
 def schemaANN(nbEntree, nbHidden, poids, save = False, emplacement = ""):
     
     ecartX = 800
